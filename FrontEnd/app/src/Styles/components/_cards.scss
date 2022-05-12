@@ -1,0 +1,99 @@
+.card-container{
+    width: 100%;
+    min-height: 600px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: center;
+    .card-item{
+        width: 100%;
+        margin: 10px;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        .card-section-1{
+
+            width: 100%;
+            min-height: 100px;
+            box-shadow: 0px 0px 10px 5px Primary(0.05);
+
+            .card-details{
+             
+                border-radius:  10px;
+
+                .card-details-header{
+                    background-color: Primary(1);
+                    padding: 15px;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    p{
+                        color: Bright(1);
+                        font-size: $h2size/1.3;
+                    }
+                }
+                .card-details-body{
+                    padding: 15px;
+
+                    background-color: Bright(1);
+        
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-center;
+                    justify-content: center;
+                    align-content: center;
+                    .card-detail-item{
+                        
+                        margin: 10px 0px;
+
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+                        align-content: center;
+
+                        label{
+                            color: Accent(1);
+                        }
+
+                        button{
+                            align-self: flex-end;
+                        }
+                    }
+                }
+            }
+        }
+        .card-section-seperator{
+            width: 2px;
+            background-color: Primary(1);
+            height: 50px;
+        }
+        .card-section-2{
+            
+        }
+    }
+}
+
+
+.rooms-bookings-header{
+    background-color: Bright(1);
+    padding: 15px;
+    width: 100%;
+    border-radius: 10px;
+    margin: 10px 0px;
+    button{
+        display: block;
+        margin: 5px 0px;
+    }
+}
+
+.rooms-bookings-footer{
+    button{
+        margin: 10px 5px;
+    }
+}

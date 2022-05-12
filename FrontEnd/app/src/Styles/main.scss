@@ -1,0 +1,36 @@
+//skeleton default styles
+/*
+@import "./skeleton/core/config";
+@import "./skeleton/themes/fresh/vars";
+@import "./skeleton/themes/fresh/grid";
+@import "./skeleton/themes/fresh/include_components";
+*/
+
+//my overrides
+@import "./overides/overides";
+
+
+// my components styles
+@import "./components/include";
+
+
+.main-content{
+    overflow-y: scroll;
+    scrollbar-width: none;
+    max-width: 100%;
+    padding: 15px;
+    height:calc(100vh - 170px);
+}
+
+.maincontainer{
+    height:calc(100vh - 40px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+};
+
+@include scrollify(".main-content",true);
+.main-block{
+    height:calc(100vh - 40px);
+};

@@ -1,0 +1,66 @@
+// Yep, taken right from bourbon - https://github.com/thoughtbot/bourbon/blob/master/dist/settings/_prefixer.scss
+$prefix-for-webkit:    true !default;
+$prefix-for-mozilla:   true !default;
+$prefix-for-microsoft: true !default;
+$prefix-for-opera:     true !default;
+$prefix-for-spec:      true !default;
+
+// Buttons
+$button-color: #fff;
+$button-font-uppercase: true;
+$button-bg-color: #333030;
+$button-weight: 600;
+$button-font-uppercase: true;
+$button-border-color: #bbb;
+$button-transition: all 60ms ease-in-out;
+$button-border-radius: 4px;
+
+// hover state
+$button-transition-hover: all 60ms ease;
+$button-hover-alpha: 0.85;
+
+// disabled
+$button-disabled-alpha: 0.8;
+
+// outline buttons
+$button-outline-background-color: transparent;
+$button-outline-hover-color: #000;
+$button-outline-hover-background-color: #fff;
+$button-outline-border-color: $button-color;
+
+// inverted outline buttons
+$button-inver-background-color: transparent;
+$button-color-invert: invert($button-color);
+$button-color-invert-hover: invert($button-outline-hover-color);
+$button-outline-hover-invert-background-color: invert($button-outline-hover-background-color);
+$button-outline-invert-border-color: $button-outline-hover-color;
+
+// clear button
+$button-clear-background-color: transparent;
+$button-clear-color: gray;
+
+// Default overrides for new theme
+$is-fluid: true; // Change to true to enable the fluid grid
+
+$link-color: #2a92ea; // default link color
+$link-hover: $link-color; // default link color on :hover
+$link-decoration: underline; // default link decoration
+
+$base-width: 80%;
+
+$font-size: 15px;  // default font size. Change here will adjust sizes across the board.
+$font-weight: 400; // sets the font weight
+$font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif; // default fonts
+$font-color: #222;  // default font color
+
+$heading-family: "Quicksand", $font-family; // default heading (h1-h6) font
+$heading-color: $font-color; // default heading (h1-h6) color
+$heading-weight: 300; // sets the weight of the heading text
+
+$form-font: $font-family; // default form font
+
+// GRID CHANGES
+$grid-max-width: 960px;
+$base-col-count: 12;
+$base-col-width: 60px;
+$use-new-grid: true;

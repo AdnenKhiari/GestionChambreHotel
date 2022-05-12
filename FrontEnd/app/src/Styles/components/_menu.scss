@@ -1,0 +1,108 @@
+@include scrollify("nav");
+
+.nav-menu-container{
+    
+    padding: 15px;
+    width: 100%;
+    width: 250px;
+    height:calc(100vh - 40px);
+
+    background-color: Bright(0.8);
+    overflow: hidden;
+    hr{
+        margin: 20px 5px;
+    }
+    .logo{
+        margin: 0px;
+        padding: 0px;
+        height: 100px;
+        object-fit: contain;
+        margin: auto;
+        width: 100%;
+    }
+
+    nav {
+        overflow-y: scroll;
+        height: 80vh;
+        .menu-title{
+            font-family: $base_font;
+            color: Accent(1);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 5px;
+        }
+        ul{
+            list-style: none;
+
+            li{
+
+                margin: 0px;
+                
+                padding: 2px 5px;
+                .menu-item-header{    
+
+                    transition: all 0.25s ease-out;
+
+                    display: flex;
+                    align-items: center;
+                    align-content: center;
+
+                    padding: 5px 2px;
+
+                    cursor: pointer;
+                    font-family: $base_font !important;
+
+
+                    color: Primary(1);
+                 
+                    img{
+                        transition: all 0.25s ease-in-out;
+                        display: inline;
+                        height: 35px;
+                        object-fit: cover;
+                        padding-right: 10px;
+                    }
+
+                    .item-title{
+                        transition: all 0.25s ease-in-out;
+                        color: Primary(1);
+                        font-family: $secondary_font !important;
+                    }
+                }
+                
+                .menu-item-header:hover,.expanded{
+                    background-color: Secondary(0.1);
+                    img{
+                        transform: scale(0.9);
+                    }
+                    .item-title{
+                        color: Muted(1) ;
+                        font-weight: 800;
+
+                    }
+                    padding-left: 4px;
+
+                }
+                .menu-item-header:active,.expanded{
+                    background-color: Accent(0.1) ;
+                    .item-title{
+                        color: Accent(1) ;
+                    }
+                }
+                .menu-sub-item ul li{
+                    margin: 5px;
+                }
+                .menu-sub-item ul li a:active, .menu-sub-item ul li a:visited,.menu-sub-item ul li a{
+                    color: Accent(1) ;       
+                    font-size: 1rem;
+                }
+                
+                .menu-sub-item li a:hover {
+                    color: Warning(1) !important ;
+                }
+            }
+        }
+        padding-bottom: 75px;
+
+    }
+}

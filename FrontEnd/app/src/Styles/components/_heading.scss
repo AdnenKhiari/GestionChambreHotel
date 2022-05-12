@@ -1,0 +1,27 @@
+header{
+
+    height: 120px;
+    width: calc(100vw - 260px); 
+    padding: 10px 20px;
+    background-color: Accent(1);
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    div:first-child{
+
+        h1{
+            padding: 5px;
+            color: Primary(1);
+        }
+    }
+
+    div:nth-child(2){
+            padding-right: 30px;
+        h1{
+
+        }
+    }
+
+}

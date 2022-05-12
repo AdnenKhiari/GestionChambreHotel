@@ -1,0 +1,152 @@
+.uniTable{
+
+    width: 100%;
+
+    padding: 25px;
+
+    background: Bright(1);
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: center;
+
+    div:first-child {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        input,textarea{
+            margin: 3px 5px;
+        }
+        h2{
+            font-size: $h1size;
+            font-family: $secondary_font;
+            .border{
+                padding: 1px 10px;
+                background-color: black;
+                border-radius: 7px;
+                margin: 3px ;
+                margin-right: 20px;
+            }
+            margin-bottom: 15px;
+        }
+        .tableSearch{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            align-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+
+            .select-drop{
+                margin: 3px 5px;
+            }
+            button{
+                margin: 5px 10px;
+            }
+            .pagination{
+                display: flex;
+                align-items: center;
+                align-content: center;
+                justify-content: flex-start;
+                .paginate-prev{
+                    transform: rotateY(180deg)
+                }
+                img{
+                    object-fit: contain;
+                    height: 40px;
+                    width: 30px;
+                    background-color: Shade(1);
+                    padding: 0px 0px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                img:hover{
+                    background-color: Accent(0.8);
+                }
+                input{
+                    text-align: center;
+                    max-width: 50px;
+                }
+
+            }
+        }
+    }
+    
+    @include scrollify(".table-container",false);
+   .table-container{
+       display: block;
+       max-height: calc(100vh - 310px);
+       overflow-y: auto;
+        
+    table{
+        table-layout: fixed !important;
+        border-collapse: collapse;
+        width: 100%;
+        tr{
+
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: Primary(1);
+
+            th,td{
+            }
+            th{
+                text-align: left;
+                color: Accent(1);
+                font-family: $secondary_font;
+            }
+            td,th{
+                padding: 15px 10px;
+            }
+        }
+        thead{
+            tr:first-child{
+                border-bottom: 1px solid Primary(0.1);
+                cursor: inherit;
+                text-transform: capitalize;
+            }
+            tr:first-child th{
+                padding-bottom: 20px;
+                letter-spacing: 0.06rem;
+            }
+            tr:first-child:hover,tr:first-child:active{
+                background-color: transparent;
+                color: inherit;
+            }
+        }
+        tr:hover{
+            background-color: Muted(0.2);
+        }
+        tr:active{
+            background-color: Accent(1);
+            color: white;
+        }
+
+
+        // Set border-radius on the top-left and bottom-left of the first table data on the table row
+        td:first-child,
+        th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        // Set border-radius on the top-right and bottom-right of the last table data on the table row
+        td:last-child,
+        th:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+    }
+   }
+
+
+}

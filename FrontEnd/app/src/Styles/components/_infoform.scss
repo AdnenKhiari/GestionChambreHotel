@@ -1,0 +1,27 @@
+.info-form{
+    width: 100%;
+    background-color: Bright(1);
+    border-radius: 10px;
+    padding: 15px;
+
+    form{
+        .input-container{
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto auto;
+        }
+
+        .form-item{
+            margin: 10px 5px;
+            label{
+                display: block;
+            }
+            input,textarea,.select-drop{
+                min-width: 280px;
+                margin: 5px 0px;
+            }
+
+        }
+    }
+
+}
