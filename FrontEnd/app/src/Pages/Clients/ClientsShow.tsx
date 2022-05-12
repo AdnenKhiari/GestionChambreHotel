@@ -22,26 +22,6 @@ const SearchComponent = ()=>{
 
 const ShowComponent = ()=>{
 
-    //use location and fetch
-    const data = [
-        ["Ali eeeeeeeeeeeeeee",10,"Hey","15-21-2015"],
-        ["Saleh eeeeeee ",20,"Hey","15-21-2015"],
-        ["Ali ee",10,"Hey","15-21-2015"],
-        ["Saleheeeeeeeeeeeeeeeee ",20,"Hey","15-21-2015"],
-        ["Ali eeeeeeee",10,"Hey","15-21-2015"],
-        ["Saleh  aaaaaaaaaaa",20,"Hey","15-21-2015"],
-    ]
-   /* const udata : userData = {
-        id: 1014,
-        here: true,
-        fullname:"Adnen Khiari",
-        cin: "12345+9",
-        address: "1 rue ibn jazzar manoba",
-        date_of_birth: "05-12-2001",
-        state: "S",
-        gender: "M"
-    }*/
-
     const  {id } = useParams()
     const {payload : udata,isLoading,isError,refetch} = useGetQuery(['get-client-by-id',id],APIROUTES.CLIENTS.GETBYID(id))
     if(isError)

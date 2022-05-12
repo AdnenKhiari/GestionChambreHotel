@@ -1,11 +1,12 @@
-const Heading = ()=>{
+const Heading = ({userInfo,setUserInfo} : {userInfo: any,setUserInfo: any})=>{
    return <header> 
     <div>
-      <h1>Welcome , User 1</h1>
-      <p>Bread Cumb</p>
+      <h1>Welcome ,{userInfo.fullname}</h1>
     </div>
     <div>
-      <p>Logout</p>
+      <p onClick={(e)=>{
+        
+      }}>Logout</p>
     </div>
   </header>
 }

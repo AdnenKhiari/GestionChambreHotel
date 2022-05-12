@@ -1,5 +1,15 @@
 const basePath = "http://localhost:4000/api";
 const Routes = {
+    USERS : {
+        SIGNOUT: basePath+'/auth/signout',
+        GETLOGGED: basePath+'/auth/logged',
+        INFO: basePath+'/auth/info',
+        LOGIN: basePath+'/auth/login',
+        ADD : basePath+'/auth/singup',
+        UPDATE : (id : any)=>basePath+'/auth/'+id,
+        GETBYID : (id: any)=>basePath+'/auth/'+id,
+        DELETE : basePath+'/clients/'
+    },
     CLIENTS : {
         INFO: basePath+'/clients/info',
         HISTORY: (id: any) =>basePath+'/clients/'+id+'/history',

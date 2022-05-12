@@ -7,6 +7,7 @@ export const useMutateQuery = (baseurl : string,method: "POST" | "PATCH" | "DELE
             headers: {
                 'Content-type' : 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(dataPost)
         }).then((dt)=>dt.json())
     },{

@@ -1,4 +1,10 @@
 const Routes = {
+    AUTH: {
+        SHOW  : "/users/",
+        ADD  : "/users/add/",
+        MOD  : "/users/mod/",
+        DEL  : "/users/del/",
+    },
     BOOKING : {
         SHOW  : "/bookings/",
         ADD  : "/bookings/add/",

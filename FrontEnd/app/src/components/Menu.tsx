@@ -17,11 +17,11 @@ const QuickAccess : ITmenuItem[] =  [
         imgSrc:"/icons/BELL.svg",
         link: ROUTES.BOOKING.SHOW
     } ,
-    {
+    /*{
         item:"Book Rooms",
         imgSrc:"/icons/BOOKING.svg"
 
-    },
+    },*/
     {
         item:"Show Clients",
         imgSrc:"/icons/USER.svg",
