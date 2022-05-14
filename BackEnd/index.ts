@@ -33,6 +33,10 @@ app.get("/",(req : Request,res : Response)=>{
 app.use("/api",ApiControllers);
 
 app.listen(process.env.SERVER_PORT,()=>{
-    console.log("Working fine !")
-    
+    console.log("Working fine !")  
 })
+/*
+app.get("/*",(req,res)=>{
+    return res.sendFile()
+})
+*/

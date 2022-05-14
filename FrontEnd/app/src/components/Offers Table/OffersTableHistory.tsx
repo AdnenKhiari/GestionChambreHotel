@@ -17,11 +17,6 @@ const searchInputs  : IsearchData[] = [
         label: "Room Number"
     },
     {
-        name: "client_name",
-        type: "text",
-        label: "Client Name"
-    },
-    {
         name: "checkIn",
         type: "date",
         label: "Check In"

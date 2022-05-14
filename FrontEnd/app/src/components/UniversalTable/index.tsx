@@ -13,6 +13,7 @@ const UniversalTable = ({queryname,querypath,title,searchData,schema,datatable,o
         <TableContent tableData={data} onclick={onRowClick ? onRowClick : (dt : any)=>console.log(dt)}/>
     </div>*/
     const { onValidate ,isLoading,isError,payload} = useUrlParams(queryname,querypath)
+
     return <div className="uniTable" >
          <div>
          <h2><span className="border"></span>{title}</h2>

@@ -1,5 +1,6 @@
 import  oracledb from 'oracledb';
 import { execute } from "../../lib/QueryExecutor"
+import { formate_date } from '../../lib/utils';
 const pagelim = 8
 export const GetRoomsInfo = async (data : any) : Promise<any> => {
     try{
@@ -52,8 +53,54 @@ export const GetRoomsInfo = async (data : any) : Promise<any> => {
         return Promise.reject(err)
     }
 }
-export const GetRoomsHistory = async (data : any) : Promise<any> => {
-    return Promise.resolve([])
+export const GetRoomsHistory = async (data : any) =>{
+    let STATEMENT = `SELECT b.id,b.date_checkin,b.date_checkout
+    FROM BOOKINGS b,BOOKING_ROOMS_ALLOCATION bra,ROOMS_ALLOCATION ra, ROOMS r
+    WHERE b.id = bra.booking_id AND bra.allocated_room_id = ra.id AND ra.room_id=r.id AND ra.room_id=:id
+    `
+
+
+    const filters  = []
+    const binds : oracledb.BindParameters = { pagenum : { val : 0}, pagelim : {val : pagelim},id : {val: data.id}}
+
+        //for pagination
+        if(data.pagenum){
+            binds["pagenum"]={val: data.pagenum}
+        }
+
+        if(data.bookingId){
+            filters.push("b.id=:booking_id")
+            binds["booking_id"]={val: data.bookingId}
+        }
+        if(data.date_checkin ){
+            const dt = formate_date(data.date_checkin)
+            filters.push("TO_CHAR(b.date_checkin,'DD/MM/YYYY')=:date_checkin")
+            binds["date_checkin"]={val:dt ,type: oracledb.STRING}
+        }
+        if(data.date_checkout ){
+            const dt = formate_date(data.date_checkout)
+            filters.push("TO_CHAR(b.date_checkout,'DD/MM/YYYY')=:date_checkout")
+            binds["date_checkout"]={val:dt ,type: oracledb.STRING}
+        }
+    
+    const FILTERS_STATEMENT = filters.map((dt)=>'('+dt+')').join(' AND ')
+    if(FILTERS_STATEMENT !== ''){
+        STATEMENT+= '\n AND ' + FILTERS_STATEMENT
+    }
+
+    STATEMENT += `\n OFFSET (:pagenum * :pagelim) ROWS FETCH FIRST :pagelim ROWS ONLY`
+    console.log(STATEMENT)
+//     console.log(STATEMENT)
+
+
+
+    const result = await execute(STATEMENT,binds);
+        //format the date:
+        result.rows?.forEach(row=>{
+            row[1] = formate_date(row[1])
+            row[2] = formate_date(row[2])
+        })
+    return {searchCount : 4, data : result.rows}
 }
 export const GetRoomById = async (data : any) : Promise<any> => {
     try{

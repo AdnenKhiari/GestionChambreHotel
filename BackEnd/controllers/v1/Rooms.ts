@@ -15,15 +15,7 @@ app.get("/info",async (req,res,next)=>{
         return next(err)
     }
 })
-app.get("/:id/history",async (req,res,next)=>{
-    try{
-        const data = req.params
-        const result : any[][] = await RoomsModel.GetRoomsHistory(data)
-        return res.json(result)
-    }catch(err){
-        return next(err)
-    }
-})
+
 app.get("/:id",async (req,res,next)=>{
     try{
         const data = req.params
@@ -55,6 +47,18 @@ app.patch("/:id",async (req,res,next)=>{
         console.log(data)
 
         const result : any[][] = await RoomsModel.UpdateRoom(data)
+        return res.json(result)
+    }catch(err){
+        return next(err)
+    }
+})
+
+app.get("/:id/history",async (req,res,next)=>{
+    try{
+        const data : any = req.query
+        data.id = req.params.id
+        console.log("H",data)
+        const result  = await RoomsModel.GetRoomsHistory(data)
         return res.json(result)
     }catch(err){
         return next(err)

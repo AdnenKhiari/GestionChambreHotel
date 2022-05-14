@@ -28,8 +28,10 @@ app.get("/:id",async (req,res,next)=>{
 })
 app.get("/:id/history",async (req,res,next)=>{
     try{
-        const data = req.params
-        const result : any[][] = await OffersModel.GetOffersHistory(data)
+        const data : any = req.query
+        data.id = req.params.id
+        console.log(data)
+        const result  = await OffersModel.GetOffersHistory(data)
         return res.json(result)
     }catch(err){
         return next(err)

@@ -1,0 +1,30 @@
+.loginpage{
+width: 100%;
+height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+align-content: center;
+    .login-form{
+        padding: 15px;
+        width: 100%;
+        max-width: 500px;
+        background-color: Bright(1);
+        h1{
+            color: Accent(1);
+            font-size: $h1size*1.5;
+        }
+        .login-form-item{
+            margin: 5px 0px;
+            display: flex;
+            flex-direction: column;
+            *{
+                margin: 5px 0px;
+            }
+        }
+        button{
+            margin: 10px 5px;
+        }
+    }
+}

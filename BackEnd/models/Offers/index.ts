@@ -92,8 +92,58 @@ export const GetOfferById = async ( data: any) : Promise<any> =>{
     }
 }
 
-export const GetOffersHistory = async ( data: any) : Promise<any> =>{
-    return Promise.resolve([])
+export const GetOffersHistory = async ( data: any) => {
+    let STATEMENT = `SELECT b.id,r.room_number,b.date_checkin,b.date_checkout
+    FROM BOOKINGS b,BOOKING_ROOMS_ALLOCATION bra,ROOMS_ALLOCATION ra, ROOMS r
+    WHERE b.id = bra.booking_id AND bra.allocated_room_id = ra.id AND ra.room_id=r.id AND ra.offer_id=:id
+    `
+
+
+    const filters  = []
+    const binds : oracledb.BindParameters = { pagenum : { val : 0}, pagelim : {val : pagelim},id : {val: data.id}}
+
+        //for pagination
+        if(data.pagenum){
+            binds["pagenum"]={val: data.pagenum}
+        }
+
+        if(data.room_number ){
+            filters.push("r.room_number=:room_number")
+            binds["room_number"]={val: data.room_number}
+        }
+        if(data.bookingId){
+            filters.push("b.id=:booking_id")
+            binds["booking_id"]={val: data.bookingId}
+        }
+        if(data.date_checkin ){
+            const dt = formate_date(data.date_checkin)
+            filters.push("TO_CHAR(b.date_checkin,'DD/MM/YYYY')=:date_checkin")
+            binds["date_checkin"]={val:dt ,type: oracledb.STRING}
+        }
+        if(data.date_checkout ){
+            const dt = formate_date(data.date_checkout)
+            filters.push("TO_CHAR(b.date_checkout,'DD/MM/YYYY')=:date_checkout")
+            binds["date_checkout"]={val:dt ,type: oracledb.STRING}
+        }
+    
+    const FILTERS_STATEMENT = filters.map((dt)=>'('+dt+')').join(' AND ')
+    if(FILTERS_STATEMENT !== ''){
+        STATEMENT+= '\n AND ' + FILTERS_STATEMENT
+    }
+
+    STATEMENT += `\n OFFSET (:pagenum * :pagelim) ROWS FETCH FIRST :pagelim ROWS ONLY`
+    console.log(STATEMENT)
+//     console.log(STATEMENT)
+
+
+
+    const result = await execute(STATEMENT,binds);
+        //format the date:
+        result.rows?.forEach(row=>{
+            row[3] = formate_date(row[3])
+            row[2] = formate_date(row[2])
+        })
+    return {searchCount : 4, data : result.rows}
 }
 
 export const AddOffer = async (data : any) : Promise<any> => {

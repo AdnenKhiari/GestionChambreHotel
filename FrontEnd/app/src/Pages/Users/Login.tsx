@@ -36,7 +36,7 @@ const Login = ({userInfo,setUserInfo} : {userInfo:any,setUserInfo: any})=>{
         return <Navigate to={ROUTES.BOOKING.SHOW} />
     }
 
-    return <form onSubmit={handleSubmit((data)=>{
+    return <div className="loginpage"><form onSubmit={handleSubmit((data)=>{
         mutate(data)
     })} 
     
@@ -58,6 +58,7 @@ const Login = ({userInfo,setUserInfo} : {userInfo:any,setUserInfo: any})=>{
 
         <p>{loginError}</p>
     </form>
+    </div> 
 }
 
 export default Login

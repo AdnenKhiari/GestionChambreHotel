@@ -1,7 +1,7 @@
 const basePath = "http://localhost:4000/api";
 const Routes = {
     USERS : {
-        SIGNOUT: basePath+'/auth/signout',
+        LOGOUT: basePath+'/auth/logout',
         GETLOGGED: basePath+'/auth/logged',
         INFO: basePath+'/auth/info',
         LOGIN: basePath+'/auth/login',

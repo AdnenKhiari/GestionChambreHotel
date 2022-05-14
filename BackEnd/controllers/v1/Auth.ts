@@ -65,6 +65,11 @@ app.post("/login",async (req,res,next)=>{
 
 })
 
+app.post("/logout",async (req,res,next)=>{
+    req.user = null;
+    res.clearCookie(ck_name)
+    res.send("Ok")
+})
 app.get("/logged",Authenticate,async (req,res,next)=>{
     return res.json(req.user)
 })

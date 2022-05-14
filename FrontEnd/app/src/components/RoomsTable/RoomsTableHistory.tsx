@@ -12,11 +12,6 @@ const searchInputs  : IsearchData[] = [
         label: "Booking ID"
     },
     {
-        name: "client_name",
-        type: "text",
-        label: "Client Name"
-    },
-    {
         name: "checkIn",
         type: "date",
         label: "Check In"
@@ -29,13 +24,12 @@ const searchInputs  : IsearchData[] = [
 ]
 
 const datatable  = (body: any) : ItableData => ({
-    header:["Booking ID","Client Name","Check In","Check Out"],
+    header:["Booking ID","Check In","Check Out"],
     body: body
 })
 const schema = joi.object({
     pagenum: joi.number().min(0).default(0).optional().label("Page Number"),
     bookingId : joi.number().allow("").positive().optional(),
-    client_name : joi.string().allow("").optional(),
     checkIn: joi.date().allow("").optional(),
     checkOut: joi.date().allow("").optional(),
 })
