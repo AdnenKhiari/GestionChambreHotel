@@ -1,6 +1,5 @@
 import express from "express"
 import * as ClientsModel from "../../models/Clients"
-import {IClientInfoOutput} from "../../lib/interfaces/Clients"
 const app = express.Router()
 
 app.get("/",(req,res)=>{
@@ -11,7 +10,7 @@ app.get("/info",async (req,res,next)=>{
     try{
         const data = req.query
         console.log(data)
-        const result : any[][] = await ClientsModel.GetClientInfo(data)
+        const result = await ClientsModel.GetClientInfo(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -21,7 +20,7 @@ app.get("/info",async (req,res,next)=>{
 app.get("/:id",async (req,res,next)=>{
     try{
         const data = req.params
-        const result : any[][] = await ClientsModel.GetClientById(data)
+        const result = await ClientsModel.GetClientById(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -31,7 +30,7 @@ app.get("/:id/history",async (req,res,next)=>{
     try{
         const data = req.query
         data.id = req.params.id
-        const result : any[][] = await ClientsModel.GetClientHistory(data)
+        const result = await ClientsModel.GetClientHistory(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -43,7 +42,7 @@ app.post("/",async (req,res,next)=>{
         const data = req.body
         console.log(data)
 
-        const result : any[][] = await ClientsModel.AddClient(data)
+        const result = await ClientsModel.AddClient(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -57,7 +56,7 @@ app.patch("/:id",async (req,res,next)=>{
         const data = req.body
         data["id"] = id
 
-        const result : any[][] = await ClientsModel.UpdateClient(data)
+        const result = await ClientsModel.UpdateClient(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -68,7 +67,7 @@ app.delete("/",async (req,res,next)=>{
     try{
         const data = req.body
         console.log(data)
-        const result : boolean = await ClientsModel.RemoveClient(data)
+        const result = await ClientsModel.RemoveClient(data)
         return res.json(result)
     }catch(err){
         return next(err)

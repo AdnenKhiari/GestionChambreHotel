@@ -3,8 +3,7 @@ import  oracledb from 'oracledb';
 import { execute } from "../../lib/QueryExecutor"
 import { formate_date } from '../../lib/utils';
 import { StatusCodes } from 'http-status-codes';
-import { Client, ClientSearch } from './types';
-
+import ApiError from "../../Errors/ApiError"
 const pagelim = 8
 
 export const GetClientInfo = async (data : ClientSearch) : Promise<{data: any[] | undefined,searchCount: number}> => {
@@ -55,7 +54,7 @@ export const GetClientInfo = async (data : ClientSearch) : Promise<{data: any[] 
     return {searchCount : searchCount?.rows?.at(0)[0], data : result.rows}
 }
 
-export const GetClientById = async ( data: {id: number}) : Promise<Client | undefined> =>{
+export const GetClientById = async ( data: {id: number | string}) : Promise<Client | undefined> =>{
 
     const STATEMENT = `SELECT id as "id",
     address as "address",
@@ -177,7 +176,7 @@ export const UpdateClient = async (data : Client) : Promise<void> => {
     }
 }
 
-export const RemoveClient = async (data : {id: number}) : Promise<void> => {
+export const RemoveClient = async (data : {id: number | string}) : Promise<void> => {
     const STATEMENT = `DELETE FROM CLIENTS WHERE id=:id`
 
     const binds : oracledb.BindParameters = {
