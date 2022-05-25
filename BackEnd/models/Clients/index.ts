@@ -1,89 +1,82 @@
-import { exec } from 'child_process';
 import OracleDB, { maxRows } from 'oracledb';
 import  oracledb from 'oracledb';
-import {IClientInfoOutput} from "../../lib/interfaces/Clients"
 import { execute } from "../../lib/QueryExecutor"
-import moment from 'moment';
 import { formate_date } from '../../lib/utils';
+import { StatusCodes } from 'http-status-codes';
+import { Client, ClientSearch } from './types';
+
 const pagelim = 8
-export const GetClientInfo = async (data : any) : Promise<any> => {
-    try{
 
-        var STATEMENT = `SELECT id,fullname,cin,date_of_birth,gender FROM CLIENTS `
-        const filters  = []
-        const binds : oracledb.BindParameters = { pagenum : { val : 0}, pagelim : {val : pagelim}}
+export const GetClientInfo = async (data : ClientSearch) : Promise<{data: any[] | undefined,searchCount: number}> => {
 
-        //for pagination
-        if(data.pagenum){
-            binds["pagenum"]={val: data.pagenum}
-        }
+    var STATEMENT = `SELECT id,fullname,cin,date_of_birth,gender FROM CLIENTS`
+    const filters  = []
+    const binds : oracledb.BindParameters = { pagenum : { val : 0}, pagelim : {val : pagelim}}
 
-        if(data.id ){
-            filters.push("id=:id")
-            binds["id"]={val: data.id}
-        }else if( data.cin ){
-            filters.push("cin=:cin")
-            binds["cin"]={val: data.cin}
-        }else{
-            if(data.fullname){
-                filters.push("fullname LIKE :fullname")
-                binds["fullname"]={val: '%'+data.fullname+'%'}
-            }
-            if(data.gender){
-                filters.push("gender=:gender")
-                binds["gender"]={val: data.gender}
-            }
-            if(data.date_of_birth ){
-                const dt = formate_date(data.date_of_birth)
-                filters.push("TO_CHAR(date_of_birth,'DD/MM/YYYY')=:date_of_birth")
-                binds["date_of_birth"]={val:dt ,type: oracledb.STRING}
-            }
-        }
-        const FILTERS_STATEMENT = filters.map((dt)=>'('+dt+')').join(' AND ')
-        if(FILTERS_STATEMENT !== ''){
-            STATEMENT+= '\n WHERE ' + FILTERS_STATEMENT
-        }
-
-        STATEMENT += `\n OFFSET :pagenum * :pagelim ROWS FETCH FIRST :pagelim ROWS ONLY`
-   //     console.log(STATEMENT)
-        const searchCount : oracledb.Result<any> = await execute("SELECT COUNT(id) FROM CLIENTS")
-        const result : oracledb.Result<any> = await execute(STATEMENT,binds)
-
-        //format the date:
-        result.rows?.forEach(row=>{
-            row[3] = formate_date(row[3])
-        })
-        return Promise.resolve({searchCount : searchCount?.rows?.at(0)[0], data : result.rows})
-
-    }catch(err){
-        return Promise.reject(err)
+    //for pagination
+    if(data.pagenum){
+        binds["pagenum"]={val: data.pagenum}
     }
+
+    if(data.id ){
+        filters.push("id=:id")
+        binds["id"]={val: data.id}
+    }else if( data.cin ){
+        filters.push("cin=:cin")
+        binds["cin"]={val: data.cin}
+    }else{
+        if(data.fullname){
+            filters.push("fullname LIKE :fullname")
+            binds["fullname"]={val: '%'+data.fullname+'%'}
+        }
+        if(data.gender){
+            filters.push("gender=:gender")
+            binds["gender"]={val: data.gender}
+        }
+        if(data.date_of_birth ){
+            const dt = formate_date(data.date_of_birth as string)
+            filters.push("TO_CHAR(date_of_birth,'DD/MM/YYYY')=:date_of_birth")
+            binds["date_of_birth"]={val:dt ,type: oracledb.STRING}
+        }
+    }
+    const FILTERS_STATEMENT = filters.map((dt)=>'('+dt+')').join(' AND ')
+    if(FILTERS_STATEMENT !== ''){
+        STATEMENT+= '\n WHERE ' + FILTERS_STATEMENT
+    }
+
+    STATEMENT += `\n OFFSET :pagenum * :pagelim ROWS FETCH FIRST :pagelim ROWS ONLY`
+    const searchCount : oracledb.Result<any> = await execute("SELECT COUNT(id) FROM CLIENTS")
+    const result : oracledb.Result<any> = await execute(STATEMENT,binds)
+
+    //format the date:
+    result.rows?.forEach(row=>{
+        row[3] = formate_date(row[3])
+    })
+    return {searchCount : searchCount?.rows?.at(0)[0], data : result.rows}
 }
 
-export const GetClientById = async ( data: any) : Promise<any> =>{
-    try{
-        const STATEMENT = `SELECT id as "id",
-        address as "address",
-        state as "state",
-        gender as "gender",
-        job as "job",
-        cin as "cin",
-        fullname as "fullname",
-        TO_CHAR(date_of_birth,'DD-MM-YYYY') as "date_of_birth"
-        FROM CLIENTS WHERE id=:id `
-        const binds = {
-            id : {val: data.id}
-        }
-        const result : OracleDB.Result<any> = await execute(STATEMENT,binds,{outFormat: oracledb.OUT_FORMAT_OBJECT});
+export const GetClientById = async ( data: {id: number}) : Promise<Client | undefined> =>{
 
-        return Promise.resolve(result.rows?.at(0))
-        
-    }catch(error){
-        return Promise.reject(error)
+    const STATEMENT = `SELECT id as "id",
+    address as "address",
+    state as "state",
+    gender as "gender",
+    job as "job",
+    cin as "cin",
+    fullname as "fullname",
+    TO_CHAR(date_of_birth,'DD-MM-YYYY') as "date_of_birth"
+    FROM CLIENTS WHERE id=:id `
+    const binds = {
+        id : {val: data.id}
     }
+    const result : OracleDB.Result<Client> = await execute(STATEMENT,binds,{outFormat: oracledb.OUT_FORMAT_OBJECT});
+    if(result.rows?.length === 0){
+        throw new ApiError(`Invalid Client ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
+    }
+    return result.rows?.at(0) 
 }
-export const GetClientHistory = async (data : any) : Promise<any> => {
-    try{
+
+export const GetClientHistory = async (data : any ) : Promise<{data: any[] | undefined,searchCount: number}> => {
         var STATEMENT = `SELECT b.id,r.room_number,b.date_checkin,b.date_checkout 
          FROM CLIENT_IN_ROOMS cir,BOOKING_ROOMS_ALLOCATION bra,BOOKINGS b,ROOMS_ALLOCATION ra,ROOMS r 
          WHERE r.id = ra.room_id 
@@ -124,8 +117,6 @@ export const GetClientHistory = async (data : any) : Promise<any> => {
         }
 
         STATEMENT += `\n OFFSET (:pagenum * :pagelim) ROWS FETCH FIRST :pagelim ROWS ONLY`
-        console.log(STATEMENT)
-   //     console.log(STATEMENT)
         const searchCount : oracledb.Result<any> = await execute("SELECT COUNT(id) FROM CLIENTS")
         const result : oracledb.Result<any> = await execute(STATEMENT,binds)
 
@@ -134,37 +125,29 @@ export const GetClientHistory = async (data : any) : Promise<any> => {
             row[3] = formate_date(row[3])
             row[2] = formate_date(row[2])
         })
-        return Promise.resolve({searchCount : searchCount?.rows?.at(0)[0], data : result.rows})
-
-    }catch(err){
-        return Promise.reject(err)
-    }
+        return {searchCount : searchCount?.rows?.at(0)[0], data : result.rows}
 }
 
-export const AddClient = async (data : any) : Promise<any> => {
+export const AddClient = async (data : Client) : Promise<any> => {
     const STATEMENT = `INSERT INTO CLIENTS VALUES (NULL,:fullname,:address,TO_DATE(:date_of_birth,'DD/MM/YYYY'),:cin,:job,:gender,:state)        `
-    try{
-        const binds : oracledb.BindParameters = {
-            fullname : {val: data.fullname,dir: oracledb.BIND_IN},
-            address : {val: data.address,dir: oracledb.BIND_IN},
-            date_of_birth : {val: formate_date(data.date_of_birth),dir: oracledb.BIND_IN},
-            cin : {val: data.cin,dir: oracledb.BIND_IN},
-            gender : {val: data.gender,dir: oracledb.BIND_IN},
-            state : {val: data.state,dir: oracledb.BIND_IN},
-            job: {val : null}
-        }
-        if(data.job !== undefined){
-            binds["job"] = {val: data.job,dir: oracledb.BIND_IN}
-        }
-        const result : OracleDB.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
 
-       return Promise.resolve(result)
-    }catch(err){
-        return Promise.reject(err)
+    const binds : oracledb.BindParameters = {
+        fullname : {val: data.fullname,dir: oracledb.BIND_IN},
+        address : {val: data.address,dir: oracledb.BIND_IN},
+        date_of_birth : {val: formate_date(data.date_of_birth as string),dir: oracledb.BIND_IN},
+        cin : {val: data.cin,dir: oracledb.BIND_IN},
+        gender : {val: data.gender,dir: oracledb.BIND_IN},
+        state : {val: data.state,dir: oracledb.BIND_IN},
+        job: {val : null}
     }
+    if(data.job !== undefined){
+        binds["job"] = {val: data.job,dir: oracledb.BIND_IN}
+    }
+    const result : OracleDB.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
+    return result   
 }
 
-export const UpdateClient = async (data : any) : Promise<any> => {
+export const UpdateClient = async (data : Client) : Promise<void> => {
     const STATEMENT = `UPDATE CLIENTS SET fullname=:fullname,
     address=:address,
     date_of_birth=TO_DATE(:date_of_birth,'DD/MM/YYYY'),
@@ -174,38 +157,34 @@ export const UpdateClient = async (data : any) : Promise<any> => {
     state=:state
     WHERE id=:id
     `
-    try{
-        const binds : oracledb.BindParameters = {
-            id : {val : data.id},
-            fullname : {val: data.fullname,dir: oracledb.BIND_IN},
-            address : {val: data.address,dir: oracledb.BIND_IN},
-            date_of_birth : {val: formate_date(data.date_of_birth),dir: oracledb.BIND_IN},
-            cin : {val: data.cin,dir: oracledb.BIND_IN},
-            gender : {val: data.gender,dir: oracledb.BIND_IN},
-            state : {val: data.state,dir: oracledb.BIND_IN},
-            job: {val : null}
-        }
-        console.log(binds)
-        if(data.job != undefined){
-            binds["job"] = {val: data.job,dir: oracledb.BIND_IN}
-        }
-        const result : any = await execute(STATEMENT,binds,{autoCommit: true})
+    const binds : oracledb.BindParameters = {
+        id : {val : data.id},
+        fullname : {val: data.fullname,dir: oracledb.BIND_IN},
+        address : {val: data.address,dir: oracledb.BIND_IN},
+        date_of_birth : {val: formate_date(data.date_of_birth as string),dir: oracledb.BIND_IN},
+        cin : {val: data.cin,dir: oracledb.BIND_IN},
+        gender : {val: data.gender,dir: oracledb.BIND_IN},
+        state : {val: data.state,dir: oracledb.BIND_IN},
+        job: {val : null}
+    }
+    if(data.job != undefined){
+        binds["job"] = {val: data.job,dir: oracledb.BIND_IN}
+    }
+    const result : any = await execute(STATEMENT,binds,{autoCommit: true})
 
-       return Promise.resolve(result)
-    }catch(err){
-        return Promise.reject(err)
+    if(result.rowsAffected === 0){
+        throw new ApiError(`Invalid Client ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
     }
 }
 
-export const RemoveClient = async (data : any) : Promise<boolean> => {
+export const RemoveClient = async (data : {id: number}) : Promise<void> => {
     const STATEMENT = `DELETE FROM CLIENTS WHERE id=:id`
-    try{
-        const binds : oracledb.BindParameters = {
-            id : {val: data.id,dir: oracledb.BIND_IN},
-        }
-        const result : oracledb.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
-       return Promise.resolve(result.rowsAffected === 1)
-    }catch(err){
-        return Promise.reject(err)
+
+    const binds : oracledb.BindParameters = {
+        id : {val: data.id,dir: oracledb.BIND_IN},
+    }
+    const result : oracledb.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
+    if(result.rowsAffected === 0){
+        throw new ApiError(`Invalid Client ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
     }
 }

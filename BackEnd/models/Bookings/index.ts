@@ -3,6 +3,7 @@ import oracledb, { BIND_OUT } from "oracledb";
 import { resolve } from "path";
 import { execute, getClassInDb } from "../../lib/QueryExecutor";
 import { formate_date } from "../../lib/utils";
+import {StatusCodes} from "http-status-codes"
 const pagelim = 8;
 
 export const GetBookingInfo = async (data: any) =>{
@@ -60,7 +61,7 @@ export const GetBookingInfo = async (data: any) =>{
     };
 };
 
-export const GetBookingById = async (data: any) =>{
+export const GetBookingById = async (data: any) : Promise<any> =>{
 
     var STATEMENT = `
     DECLARE
@@ -95,21 +96,18 @@ export const AddBooking = async (data : any)=>{
 
 
 export const RemoveBooking = async (data : any)=>{
-  //    -- GestionHotel.remove_room_bookings(:rm);
   var STATEMENT = `BEGIN
     GestionHotel.remove_booking(:id);
     DELETE FROM BOOKINGS WHERE BOOKINGS.id=:id;
-
   END;`;
   const binds: oracledb.BindParameters = {
     id: {val: data.id},
-   /* rm  : {val: data.ROOMS_TO_REMOVE, type: "GESTIONHOTEL.SET_REMOVED_ARR" }*/
   };
 
   const result = await execute(STATEMENT, binds,{outFormat: oracledb.OUT_FORMAT_OBJECT,autoCommit:true});
-  console.log(result)
-  return result
-
+  /*if(result.rowsAffected === 0){
+    throw ApiError("Could Not Remove the booking",null,StatusCodes.BAD_REQUEST)
+  }*/
 }
 
 export const ModBooking = async (data : any)=>{
@@ -127,7 +125,6 @@ export const ModBooking = async (data : any)=>{
   };
 
   const result = await execute(STATEMENT, binds,{outFormat: oracledb.OUT_FORMAT_OBJECT,autoCommit:true});
-  console.log(result)
   return result
 }
 
@@ -144,6 +141,4 @@ const getBookingObjectData =  (data: any) => {
     data.DATE_CHECKOUT= new Date(data.DATE_CHECKOUT)
    
    return data
-
 }
-
