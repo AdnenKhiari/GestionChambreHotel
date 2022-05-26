@@ -26,7 +26,6 @@ export const Authenticate = async (req: Request,res: Response,next: NextFunction
     return next(new ApiError("You need to login to access the requested resource",null,StatusCodes.UNAUTHORIZED))
 }
 
-
 app.post("/signup",async (req,res,next)=>{
     try{
         const {email,password,fullname} = req.body

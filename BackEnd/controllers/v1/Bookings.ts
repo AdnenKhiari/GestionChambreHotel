@@ -1,6 +1,5 @@
 import express from "express"
 import * as BookingsModel from "../../models/Bookings"
-import {IClientInfoOutput} from "../../lib/interfaces/Clients"
 const app = express.Router()
 
 app.get("/",(req,res)=>{
@@ -11,7 +10,7 @@ app.get("/info",async (req,res,next)=>{
     try{
         const data = req.query
         console.log(data)
-        const result : any = await BookingsModel.GetBookingInfo(data)
+        const result  = await BookingsModel.GetBookingInfo(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -24,7 +23,6 @@ app.get("/:id",async (req,res,next)=>{
         const result = await BookingsModel.GetBookingById(data)
         return res.json(result)
     }catch(err){
-        console.log("Michit feha")
         return next(err)
     }
 })
@@ -61,19 +59,4 @@ app.delete("/",async (req,res,next)=>{
     }
 })
 
-
-/*
-
-app.get("/:id/history",async (req,res,next)=>{
-    try{
-        const data = req.params
-        const result : any[][] = await BookingsModel.GetBookingHistory(data)
-        return res.json(result)
-    }catch(err){
-        return next(err)
-    }
-})
-
-
-*/
 export default app

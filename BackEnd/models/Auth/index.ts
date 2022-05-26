@@ -14,9 +14,14 @@ export const LoginUser = async (email: string) : Promise<User | null> =>{
 
 export const CreateUser = async (data: User) =>{
     const STATEMENT = `
+    DECLARE
+    e EXCEPTION;
     BEGIN
         INSERT INTO USERS VALUES (null,:fullname,:email,:password,'A')
         RETURNING id INTO :id;
+        IF SQL%ROWCOUNT = 0 THEN
+            raise_application_error(-20000, 'Nothing has been inserted for USERS');
+        END IF;
     END;
     `
     const binds = {
