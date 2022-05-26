@@ -1,6 +1,8 @@
 import express,{NextFunction, Response,Request} from "express"
 import * as AuthModel from "../../models/Auth"
 import bcrypt  from "bcrypt"
+import ApiError from "../../Errors/ApiError"
+import { StatusCodes } from "http-status-codes"
 const app = express.Router()
 
 const ck_name = 'gh-sid-connect'
@@ -21,7 +23,7 @@ export const Authenticate = async (req: Request,res: Response,next: NextFunction
     await AuthenticateUser(req,res);
     if(req.user)
         return next()
-    return res.status(400).send("Not Authorised")
+    return next(new ApiError("You need to login to access the requested resource",null,StatusCodes.UNAUTHORIZED))
 }
 
 
@@ -32,13 +34,11 @@ app.post("/signup",async (req,res,next)=>{
         const logged_user = await AuthModel.CreateUser({email,password: hashed_password,fullname})
     
         if(logged_user){
-          
-           //add connection cookie 
           await addCookie(logged_user,res)
           req.user= logged_user
           return res.json({fullname: logged_user.fullname,id: logged_user.id})  
         }else{
-            return res.status(400).send("Error in auth")
+            return next(new Error("User could not be created"))
         }
     }catch(err){
         return next(err)
@@ -54,10 +54,9 @@ app.post("/login",async (req,res,next)=>{
         const email: string = data.email
         const user: any = await LoginUser(email,data.password);
         if(!user){
-            return res.status(400).send("Bad Credentials")
+            return next(new ApiError("Bad Credentials",null,StatusCodes.BAD_REQUEST))
         }
         await addCookie(user,res)
-      //  console.log("USER",user)
         return res.json(user)
     }catch(err){
         return next(err)
@@ -75,10 +74,10 @@ app.get("/logged",Authenticate,async (req,res,next)=>{
 })
 
 const LoginUser = async (email : string,password: string ) =>{
-    const user: any = await AuthModel.LoginUser(email);
+    const user: User | null = await AuthModel.LoginUser(email);
     if(!user)
         return null;
-    const match = await bcrypt.compare(password,user.password);
+    const match = await bcrypt.compare(password,user.password as string);
     if(match){
         return {id: user.id,fullname: user.fullname}
     }
@@ -88,7 +87,6 @@ const AuthenticateUser = async (req: Request,res: Response)=>{
     if(req.user)
         return;
     const ssid = req.cookies[ck_name]
-    console.log("SSID: ",ssid)
     if(ssid){
         const user = await AuthModel.GetUserBySSID(ssid)
         req.user = user

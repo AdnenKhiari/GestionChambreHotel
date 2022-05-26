@@ -26,6 +26,12 @@ interface Room {
     state?: 'F' | 'O' | 'M' | 'C',
 }
 
+interface User{
+    id?: number,
+    email?: string,
+    fullname?: string,
+    password?: string,
+}
 interface ClientSearch extends Client {
     pagenum?: number
 }
