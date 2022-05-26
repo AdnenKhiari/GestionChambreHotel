@@ -3,7 +3,8 @@ import {IsearchData,ItableData} from "../UniversalTable/TableSchema"
 import joi from "joi"
 import React from "react"
 import APIROUTES from "../../constants/ApiRoutes"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import Routes from "../../constants/Routes"
 
 const searchInputs  : IsearchData[] = [
     {
@@ -36,8 +37,9 @@ const schema = joi.object({
 
 const RoomsTableHistory = ()=>{
     const {id} = useParams()
+    const nav = useNavigate()
     return <> 
-        <UniversalTable queryname="rooms-table-history" datatable={datatable} querypath={APIROUTES.ROOMS.HISTORY(id)} title="History" onRowClick = {console.log}  searchData={searchInputs} schema={schema} paginate={true} />
+        <UniversalTable queryname="rooms-table-history" datatable={datatable} querypath={APIROUTES.ROOMS.HISTORY(id)} title="History" onRowClick = {(dt: any[])=> nav(Routes.BOOKING.SHOW + dt[0])}  searchData={searchInputs} schema={schema} paginate={true} />
     </>
 }
 

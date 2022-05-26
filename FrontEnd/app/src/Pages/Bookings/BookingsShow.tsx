@@ -69,7 +69,7 @@ const CardItem = ({roomData} : {roomData : any})=>{
     return <div className="card-item">
         <div className="card-section-1">
             <div className="card-details">
-                <div className="card-details-header">
+                <div className="card-details-header" style={{cursor: "pointer"}} onClick={(e)=> nav(ROUTES.ROOMS.SHOW + roomData.ROOM_NUMBER )}>
                     <p>Room Number : </p>
                     <p>{roomData.ROOM_NUMBER}</p>
                 </div>
