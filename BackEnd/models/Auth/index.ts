@@ -12,7 +12,7 @@ export const LoginUser = async (email: string) : Promise<User | null> =>{
     return result.rows?.at(0) as User;
 }
 
-export const CreateUser = async (data: any) =>{
+export const CreateUser = async (data: User) =>{
     const STATEMENT = `
     BEGIN
         INSERT INTO USERS VALUES (null,:fullname,:email,:password,'A')
