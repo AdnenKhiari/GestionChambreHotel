@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import ApiError from "../../Errors/ApiError"
 const pagelim = 8
 
-export const GetClientInfo = async (data : ClientSearch) : Promise<{data: any[] | undefined,searchCount: number}> => {
+export const GetClientInfo = async (data : ClientSearch) : Promise<PaginatedArr> => {
 
     var STATEMENT = `SELECT id,fullname,cin,date_of_birth,gender FROM CLIENTS`
     const filters  = []
@@ -75,7 +75,7 @@ export const GetClientById = async ( data: {id: number | string}) : Promise<Clie
     return result.rows?.at(0) 
 }
 
-export const GetClientHistory = async (data : any ) : Promise<{data: any[] | undefined,searchCount: number}> => {
+export const GetClientHistory = async (data : any ) : Promise<PaginatedArr> => {
         var STATEMENT = `SELECT b.id,r.room_number,b.date_checkin,b.date_checkout 
          FROM CLIENT_IN_ROOMS cir,BOOKING_ROOMS_ALLOCATION bra,BOOKINGS b,ROOMS_ALLOCATION ra,ROOMS r 
          WHERE r.id = ra.room_id 

@@ -4,6 +4,8 @@ import {testConnection,Init} from "./lib/QueryExecutor"
 import ApiControllers from "./controllers"
 import cors from "cors"
 import CookieParser from "cookie-parser"
+import { ErrorHandler } from "./Errors/ErrorHandler"
+import { exit } from "process"
 //start an app instance
 const app : Express = express()
 require("dotenv").config()
@@ -31,6 +33,17 @@ app.get("/",(req : Request,res : Response)=>{
 })
 
 app.use("/api",ApiControllers);
+
+app.use(ErrorHandler)
+
+process.on("unhandledRejection",(reason: Error, promise: Promise<any>) => {
+    throw reason;
+})
+
+process.on("uncaughtException", (error: Error) => {
+    console.log("Unexpected Error",error)
+    process.exit(1);
+})
 
 app.listen(process.env.SERVER_PORT,()=>{
     console.log("Working fine !")  

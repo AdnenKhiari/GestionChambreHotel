@@ -16,14 +16,14 @@ export const execute = (STATEMENT : string,data : oracledb.BindParameters  = {},
     }catch(err){
         return reject(err)
     }finally{
-        if(connection){
+       /* if(connection){
             try{
                 await connection?.release()
             }catch(errc){
                 console.log("err in release")
                 return reject(errc) 
             } 
-        }
+        }*/
     }
  })
 

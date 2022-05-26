@@ -1,8 +1,10 @@
+import { StatusCodes } from 'http-status-codes';
 import  oracledb from 'oracledb';
+import ApiError from '../../Errors/ApiError';
 import { execute } from "../../lib/QueryExecutor"
 import { formate_date } from '../../lib/utils';
 const pagelim = 8
-export const GetRoomsInfo = async (data : any) : Promise<any> => {
+export const GetRoomsInfo = async (data : RoomSearch) : Promise<PaginatedArr> => {
     try{
 
         var STATEMENT = `SELECT id,room_number,capacity,type,options,state FROM ROOMS`
@@ -53,6 +55,7 @@ export const GetRoomsInfo = async (data : any) : Promise<any> => {
         return Promise.reject(err)
     }
 }
+
 export const GetRoomsHistory = async (data : any) =>{
     let STATEMENT = `SELECT b.id,b.date_checkin,b.date_checkout
     FROM BOOKINGS b,BOOKING_ROOMS_ALLOCATION bra,ROOMS_ALLOCATION ra, ROOMS r
@@ -102,50 +105,43 @@ export const GetRoomsHistory = async (data : any) =>{
         })
     return {searchCount : 4, data : result.rows}
 }
-export const GetRoomById = async (data : any) : Promise<any> => {
-    try{
-        const STATEMENT = `SELECT id as "id",
-        room_number as "room_number",
-        capacity as "capacity",
-        type as "type",
-        options as "options",
-        state as "state"
-        FROM ROOMS
-        WHERE id=:id`
-        const binds = {
-            id : {val: data.id}
-        }
-        const result : oracledb.Result<any> = await execute(STATEMENT,binds,{outFormat: oracledb.OUT_FORMAT_OBJECT});
 
-        return Promise.resolve(result.rows?.at(0))
-        
-    }catch(error){
-        return Promise.reject(error)
+export const GetRoomById = async (data : {id : number | string}) : Promise<Room | undefined> => {
+
+    const STATEMENT = `SELECT id as "id",
+    room_number as "room_number",
+    capacity as "capacity",
+    type as "type",
+    options as "options",
+    state as "state"
+    FROM ROOMS
+    WHERE id=:id`
+    const binds = {
+        id : {val: data.id}
     }
+    const result : oracledb.Result<any> = await execute(STATEMENT,binds,{outFormat: oracledb.OUT_FORMAT_OBJECT});
+    if(result.rows?.length === 0){
+        throw new ApiError(`Invalid Room ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
+    }
+    return result.rows?.at(0)
+    
 }
 
-
-export const AddRoom = async (data : any) : Promise<any> => {
+export const AddRoom = async (data : any) : Promise<void> => {
 
     const STATEMENT = `INSERT INTO ROOMS VALUES (null,:room_number,:capacity,:type,:options,:state)`
-    console.log("hii guys")
 
-    try{
-        const binds : oracledb.BindParameters = {
-            room_number : {val: data.room_number,dir: oracledb.BIND_IN},
-            capacity : {val: data.capacity,dir: oracledb.BIND_IN},
-            type : {val: data.type,dir: oracledb.BIND_IN},
-            options : {val: data.options,dir: oracledb.BIND_IN},
-            state : {val: data.state,dir: oracledb.BIND_IN}
-        }
-        const result : oracledb.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
-       return Promise.resolve(result)
-    }catch(err){
-        return Promise.reject(err)
+    const binds : oracledb.BindParameters = {
+        room_number : {val: data.room_number,dir: oracledb.BIND_IN},
+        capacity : {val: data.capacity,dir: oracledb.BIND_IN},
+        type : {val: data.type,dir: oracledb.BIND_IN},
+        options : {val: data.options,dir: oracledb.BIND_IN},
+        state : {val: data.state,dir: oracledb.BIND_IN}
     }
+    const result : oracledb.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
 }
 
-export const UpdateRoom = async (data : any) : Promise<any> => {
+export const UpdateRoom = async (data : any) : Promise<void> => {
 
     const STATEMENT = `UPDATE ROOMS SET 
     room_number=:room_number,
@@ -157,33 +153,30 @@ export const UpdateRoom = async (data : any) : Promise<any> => {
     WHERE id=:id
     `
 
-    try{
-        const binds : oracledb.BindParameters = {
-            id : {val : data.id},
-            room_number : {val: data.room_number,dir: oracledb.BIND_IN},
-            capacity : {val: data.capacity,dir: oracledb.BIND_IN},
-            type : {val: data.type,dir: oracledb.BIND_IN},
-            options : {val: data.options,dir: oracledb.BIND_IN},
-            state : {val: data.state,dir: oracledb.BIND_IN}
-        }
+    const binds : oracledb.BindParameters = {
+        id : {val : data.id},
+        room_number : {val: data.room_number,dir: oracledb.BIND_IN},
+        capacity : {val: data.capacity,dir: oracledb.BIND_IN},
+        type : {val: data.type,dir: oracledb.BIND_IN},
+        options : {val: data.options,dir: oracledb.BIND_IN},
+        state : {val: data.state,dir: oracledb.BIND_IN}
+    }
 
-        const result : any = await execute(STATEMENT,binds,{autoCommit: true})
+    const result : any = await execute(STATEMENT,binds,{autoCommit: true})
 
-       return Promise.resolve(result)
-    }catch(err){
-        return Promise.reject(err)
+    if(result.rowsAffected === 0){
+        throw new ApiError(`Invalid Room ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
     }
 }
 
-export const RemoveRoom = async (data : any) : Promise<boolean> => {
+export const RemoveRoom = async (data : any) : Promise<void> => {
     const STATEMENT = `DELETE FROM ROOMS WHERE id=:id`
-    try{
-        const binds : oracledb.BindParameters = {
-            id : {val: data.id,dir: oracledb.BIND_IN},
-        }
-        const result : oracledb.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
-       return Promise.resolve(result.rowsAffected === 1)
-    }catch(err){
-        return Promise.reject(err)
+
+    const binds : oracledb.BindParameters = {
+        id : {val: data.id,dir: oracledb.BIND_IN},
+    }
+    const result : oracledb.Result<any> = await execute(STATEMENT,binds,{autoCommit: true})
+    if(result.rowsAffected === 0){
+        throw new ApiError(`Invalid Room ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
     }
 }

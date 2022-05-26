@@ -9,8 +9,7 @@ app.get("/",(req,res)=>{
 app.get("/info",async (req,res,next)=>{
     try{
         const data = req.query
-        console.log(data)
-        const result : any[][] = await OffersModel.GetOffersInfo(data)
+        const result  = await OffersModel.GetOffersInfo(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -20,7 +19,7 @@ app.get("/info",async (req,res,next)=>{
 app.get("/:id",async (req,res,next)=>{
     try{
         const data = req.params
-        const result : any[][] = await OffersModel.GetOfferById(data)
+        const result : Offer | undefined = await OffersModel.GetOfferById(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -42,7 +41,7 @@ app.post("/",async (req,res,next)=>{
         const data = req.body
         console.log(data)
 
-        const result : any[][] = await OffersModel.AddOffer(data)
+        const result = await OffersModel.AddOffer(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -56,7 +55,7 @@ app.patch("/:id",async (req,res,next)=>{
         const data = req.body
         data["id"] = id
 
-        const result : any[][] = await OffersModel.UpdateOffer(data)
+        const result = await OffersModel.UpdateOffer(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -67,7 +66,7 @@ app.delete("/",async (req,res,next)=>{
     try{
         const data = req.body
         console.log(data)
-        const result : boolean = await OffersModel.RemoveOffer(data)
+        const result = await OffersModel.RemoveOffer(data)
         return res.json(result)
     }catch(err){
         return next(err)

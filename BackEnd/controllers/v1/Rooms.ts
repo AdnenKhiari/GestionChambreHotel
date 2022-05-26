@@ -9,7 +9,7 @@ app.get("/info",async (req,res,next)=>{
     try{
         const data = req.query
         console.log(data)
-        const result : any[][] = await RoomsModel.GetRoomsInfo(data)
+        const result  = await RoomsModel.GetRoomsInfo(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -19,7 +19,7 @@ app.get("/info",async (req,res,next)=>{
 app.get("/:id",async (req,res,next)=>{
     try{
         const data = req.params
-        const result : any[][] = await RoomsModel.GetRoomById(data)
+        const result  = await RoomsModel.GetRoomById(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -29,9 +29,7 @@ app.get("/:id",async (req,res,next)=>{
 app.post("/",async (req,res,next)=>{
     try{
         const data = req.body
-       // console.log(data)
-
-        const result : any[][] = await RoomsModel.AddRoom(data)
+        const result = await RoomsModel.AddRoom(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -46,7 +44,7 @@ app.patch("/:id",async (req,res,next)=>{
         data["id"] = id
         console.log(data)
 
-        const result : any[][] = await RoomsModel.UpdateRoom(data)
+        const result = await RoomsModel.UpdateRoom(data)
         return res.json(result)
     }catch(err){
         return next(err)
@@ -69,7 +67,7 @@ app.delete("/",async (req,res,next)=>{
     try{
         const data = req.body
         console.log(data)
-        const result : boolean = await RoomsModel.RemoveRoom(data)
+        const result = await RoomsModel.RemoveRoom(data)
         return res.json(result)
     }catch(err){
         return next(err)
