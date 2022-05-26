@@ -68,9 +68,26 @@ BEGIN
     SELECT allocated_room_id BULK COLLECT INTO arr  FROM BOOKING_ROOMS_ALLOCATION WHERE  booking_id=id;
     FOR rm IN 1..arr.COUNT 
     LOOP
+
     DELETE FROM BOOKING_ROOMS_ALLOCATION WHERE allocated_room_id=arr(rm);
+    -- for error
+    IF SQL%ROWCOUNT = 0 THEN
+        raise_application_error(-20000, 'Could not remove from BOOKING_ROOMS_ALLOCATION');
+    END IF;
+
+
     DELETE FROM CLIENT_IN_ROOMS WHERE allocated_room_id=arr(rm);
+    -- for error
+    IF SQL%ROWCOUNT = 0 THEN
+        raise_application_error(-20000, 'Could not remove from CLIENT_IN_ROOMS');
+    END IF;
+
+
     DELETE FROM ROOMS_ALLOCATION WHERE id=arr(rm);
+    -- for error
+    IF SQL%ROWCOUNT = 0 THEN
+        raise_application_error(-20000, 'Could not remove from ROOMS_ALLOCATION');
+    END IF;
        
     --DBMS_OUTPUT.PUT_LINE(rm);
     END LOOP;
@@ -96,6 +113,11 @@ BEGIN
        INSERT INTO BOOKINGS VALUES (null,bk.name,bk.date_checkin,bk.date_checkout)
        RETURNING id INTO bk_id;
        
+        -- for error
+        IF SQL%ROWCOUNT = 0 THEN
+            raise_application_error(-20000, 'Could not insert into BOOKINGS');
+        END IF;
+
        bk.booking_id := bk_id;
        
     ELSE
@@ -107,13 +129,33 @@ BEGIN
        
        WHERE id = bk.booking_id;
    
+        -- for error
+        IF SQL%ROWCOUNT = 0 THEN
+            raise_application_error(-20000, 'Could not update BOOKINGS');
+        END IF;
+
     END IF;
     
    FOR r_index IN 0..rooms_to_be_removed.COUNT-1
    LOOP
     DELETE FROM BOOKING_ROOMS_ALLOCATION WHERE allocated_room_id=rooms_to_be_removed(r_index);
+    -- for error
+    IF SQL%ROWCOUNT = 0 THEN
+        raise_application_error(-20000, 'Could not remove from BOOKING_ROOMS_ALLOCATION');
+    END IF;
+
     DELETE FROM CLIENT_IN_ROOMS WHERE allocated_room_id=rooms_to_be_removed(r_index);
+        -- for error
+    IF SQL%ROWCOUNT = 0 THEN
+        raise_application_error(-20000, 'Could not remove from CLIENT_IN_ROOMS');
+    END IF;
+
     DELETE FROM ROOMS_ALLOCATION WHERE id=rooms_to_be_removed(r_index);
+        -- for error
+    IF SQL%ROWCOUNT = 0 THEN
+        raise_application_error(-20000, 'Could not remove from ROOMS_ALLOCATION');
+    END IF;
+
    END LOOP;
           
    FOR room_iterator IN 0..bk.rooms.COUNT-1
@@ -125,11 +167,19 @@ BEGIN
           
             INSERT INTO ROOMS_ALLOCATION VALUES (null,room_instance.food_choice,room_instance.room_id,room_instance.offer_id)
             RETURNING id INTO r_id;
+            -- for error
+            IF SQL%ROWCOUNT = 0 THEN
+                raise_application_error(-20000, 'Could not insert in Rooms Allocation');
+            END IF;
             
             room_instance.allocated_room_id := r_id;
             
             INSERT INTO BOOKING_ROOMS_ALLOCATION VALUES (bk.booking_id,room_instance.allocated_room_id);
-                        
+            -- for error
+            IF SQL%ROWCOUNT = 0 THEN
+                raise_application_error(-20000, 'Could not insert in BOOKING_ROOMS_ALLOCATION');
+            END IF;
+
         ELSE
          
             UPDATE ROOMS_ALLOCATION SET
@@ -137,17 +187,29 @@ BEGIN
             room_id=room_instance.room_id,
             offer_id=room_instance.offer_id
             WHERE id = room_instance.allocated_room_id;    
-         
+            -- for error
+            IF SQL%ROWCOUNT = 0 THEN
+                raise_application_error(-20000, 'Could not update in Rooms Allocation');
+            END IF;
+
         END IF;
             
         FOR client_iterator IN 0..room_instance.clients_to_add.COUNT-1
         LOOP
             INSERT INTO CLIENT_IN_ROOMS VALUES (room_instance.clients_to_add(client_iterator),room_instance.allocated_room_id);
+            -- for error
+            IF SQL%ROWCOUNT = 0 THEN
+                raise_application_error(-20000, 'Could not insert in CLIENT_IN_ROOMS');
+            END IF;
         END LOOP;
         
         FOR client_iterator IN 0..room_instance.clients_to_remove.COUNT-1
         LOOP
             DELETE FROM CLIENT_IN_ROOMS WHERE client_id = room_instance.clients_to_remove(client_iterator) AND allocated_room_id=room_instance.allocated_room_id;
+            -- for error
+            IF SQL%ROWCOUNT = 0 THEN
+                raise_application_error(-20000, 'Could not remove from CLIENT_IN_ROOMS');
+            END IF;
         END LOOP;
         
     END LOOP;
@@ -206,4 +268,3 @@ CLOSE rooms_data;
 res :=current_bk;
 END;
 END GestionHotel;
-
