@@ -63,7 +63,7 @@ const BookingInfo : React.FC<{bookingData : bookingsData}> = ({bookingData})=>{
 }
 
 const datatable  = (body: any) : IUniversalTable.ItableData => ({
-    header:["Client ID","Name","Birth Date","Age"],
+    header:["Client ID","Name","Birth Date","Gender"],
     body: body
 }) 
 const CardItem = ({roomData} : {roomData : roomData})=>{
