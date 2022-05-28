@@ -6,7 +6,7 @@ import { BookingContext } from "../../lib/context";
 import { useContext } from "react";
 
 const datatable  = (body: any) : IUniversalTable.ItableData => ({
-    header:["Client ID","Name","Birth Date","Age"],
+    header:["Client ID","Name","Birth Date","Gender"],
     body: body
 }) 
 
