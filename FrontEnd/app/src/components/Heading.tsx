@@ -4,6 +4,8 @@ import { useMutateQuery } from "../lib/Queries/useMutateQuery"
 import { IUseQuery } from "../types"
 import { useContext } from "react"
 import { UserContext } from "../lib/context"
+import { FadeInScale } from "../lib/Animations"
+import { motion } from "framer-motion"
 const Heading : React.FC =  ()=>{
   const user = useContext(UserContext)
   
@@ -13,7 +15,7 @@ const Heading : React.FC =  ()=>{
    const nav = useNavigate()
    return <header> 
     <div>
-      <h1>Welcome ,{user?.userInfo.fullname}</h1>
+      <motion.h1 variants={FadeInScale} animate="animate" initial="initial">Welcome ,{user?.userInfo.fullname}</motion.h1>
     </div>
     <div>
       <p id="lgout"  onClick={(e)=>{
