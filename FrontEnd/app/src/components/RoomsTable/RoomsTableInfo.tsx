@@ -1,14 +1,9 @@
-import {IsearchData,ItableData} from "../UniversalTable/TableSchema"
-import TableSearch from "../UniversalTable/TableSearch"
-import TableContent from "../UniversalTable/TableContent"
-
+import {IUniversalTable} from "../../types"
 import joi from "joi"
 import React from "react"
 import APIROUTES from "../../constants/ApiRoutes"
-import {useUrlParams} from "../../lib/Queries/useUrlParams"
 import UniversalTable from "../UniversalTable"
-
-const searchInputs  : IsearchData[] = [
+const searchInputs  : IUniversalTable.IsearchData[] = [
     {
         name: "id",
         type: "number",
@@ -46,7 +41,7 @@ const searchInputs  : IsearchData[] = [
     }
 ]
 
-const datatable  = (body: any) : ItableData => ({
+const datatable  = (body: any) : IUniversalTable.ItableData => ({
     header:["Rooms Id","Rooms Number","Capaciy","Room Type","Room Option","Room State"],
     body: body
 })
@@ -63,21 +58,8 @@ const schema = joi.object({
 
 })
 
-const RoomsTableInfo = ({onRowClick} : {onRowClick?: any})=>{
-   /*const { onValidate ,isLoading,isError,payload} = useUrlParams('rooms-table-info',APIROUTES.ROOMS.INFO)
-   return <div className="uniTable" >
-        <div>
-        <h2><span className="border"></span>Rooms</h2>
-        <TableSearch  paginate={true} onValidate={onValidate} searchData={searchInputs} schema={schema} />
-        </div>
-        {isLoading && <h1>Loading...</h1> }
-        {!isLoading && isError && <h1>Error !</h1> }
-        {!isError && !isLoading && payload  && <TableContent tableData={datatable(payload.data)} onclick={onRowClick ? onRowClick : (dt : any)=>console.log(dt)}/>}
-    </div>
-*/
-    return <>
-        <UniversalTable queryname="room-table-info" datatable={datatable} querypath={APIROUTES.ROOMS.INFO} title="Rooms" onRowClick = {onRowClick}  searchData={searchInputs} schema={schema} paginate={true} />
-    </>
+const RoomsTableInfo : React.FC<{onRowClick?: any}> = ({onRowClick})=>{
+    return <UniversalTable queryname="room-table-info" datatable={datatable} querypath={APIROUTES.ROOMS.INFO} title="Rooms" onRowClick = {onRowClick}  searchData={searchInputs} schema={schema} paginate={true} />
 }
 
 export default RoomsTableInfo

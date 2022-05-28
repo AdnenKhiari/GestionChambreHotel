@@ -1,9 +1,11 @@
-import { MouseEventHandler } from "react"
+import { motion } from "framer-motion"
+import { scale } from "../../lib/Animations"
+import { IUniversalTable } from "../../types"
 
-const TableContent = ({tableData,onclick} : {tableData : any,onclick?: any})=>{
+const TableContent = ({tableData,onclick} : {tableData : IUniversalTable.ItableData,onclick: (dt : any) => void})=>{
 	//console.log("TD",tableData)
    // return <TestData/>
-    return <div className="table-container">
+    return <div className="table-container" >
 		<table>
 			<thead>
 			<tr>
@@ -14,7 +16,7 @@ const TableContent = ({tableData,onclick} : {tableData : any,onclick?: any})=>{
 		</thead>
 		<br />        
 
-		<tbody>
+		<motion.tbody variants={scale}>
         {tableData.body && tableData.body.map((row : any,index : number)=>{
             return <tr key={index} onClick={(e)=>onclick(row)}> 
             {row.map((cell : any,index2: number)=>{
@@ -22,12 +24,12 @@ const TableContent = ({tableData,onclick} : {tableData : any,onclick?: any})=>{
             })
             }</tr>
         })}
-		</tbody>
+		</motion.tbody>
 
     </table>
 	</div>
 }
-const TestData = ()=>{
+/*const TestData = ()=>{
     return <div className="table-container"><table>
 		<thead>	
 		<tr>
@@ -489,4 +491,5 @@ const TestData = ()=>{
 </table>
 </div>
 }
+*/
 export default TableContent

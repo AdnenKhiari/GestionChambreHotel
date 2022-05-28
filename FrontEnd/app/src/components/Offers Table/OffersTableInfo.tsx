@@ -1,9 +1,9 @@
 import UniversalTable from "../UniversalTable"
-import {IsearchData,ItableData} from "../UniversalTable/TableSchema"
 import joi from "joi"
 import APIROUTES from "../../constants/ApiRoutes"
+import {IUniversalTable} from "../../types"
 
-const searchInputs  : IsearchData[] = [
+const searchInputs  :  IUniversalTable.IsearchData[] = [
     {
         name: "id",
         type: "number",
@@ -32,7 +32,7 @@ const searchInputs  : IsearchData[] = [
     }
 ]
 
-const datatable  = (body: any) : ItableData => ({
+const datatable  = (body: any) : IUniversalTable.ItableData => ({
     header:["Offer ID","Offer Name","Start Date","End Date","Price"],
     body: body
 })

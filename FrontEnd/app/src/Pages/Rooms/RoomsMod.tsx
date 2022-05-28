@@ -6,16 +6,9 @@ import  APIROUTES from "../../constants/ApiRoutes"
 import { useMutateQuery } from "../../lib/Queries/useMutateQuery"
 import { getRoomCapacity ,getRoomState} from "../../lib/Utils"
 import RoomsTableInfo from "../../components/RoomsTable/RoomsTableInfo"
-/*const udata : userData = {
-    id: 1014,
-    here: true,
-    fullname:"Adnen Khiari",
-    cin: "12345+9",
-    address: "1 rue ibn jazzar manoba",
-    date_of_birth: "05-12-2001",
-    state: "S",
-    gender: "M"
-}*/
+import { motion } from "framer-motion"
+import { FadeInScale, StaggerChildren } from "../../lib/Animations"
+
 const ModComponent = ()=>{
     const  {id } = useParams()
     
@@ -27,8 +20,8 @@ const ModComponent = ()=>{
     if(isLoading)
         return <p className="warning-color">Loading !</p>
 
-    return <div className="page">
-        <section className="page-header">
+    return <motion.div className="page" variants={StaggerChildren(0.1,0)} initial="initial" exit="exit" animate="animate">
+        <motion.div className="page-header" variants={FadeInScale}>
             <div className="section-1">
                 <h1> Room:<span>#{rdata.id}</span> </h1>
                 {<div className={"labelitem " + (rdata.state === 'F' ? "success" : "danger") }>{getRoomState(rdata.state)}</div>}
@@ -37,14 +30,14 @@ const ModComponent = ()=>{
                 <p>Room Capacity:<span>{getRoomCapacity(rdata.capacity)}</span></p>
                 <p>Room Number:<span>{rdata.room_number}</span></p>
             </div>
-        </section>
-        <section className="page-body">
+        </motion.div>
+        <motion.div className="page-body" variants={FadeInScale}>
             <RoomsModAddModel mutate={mutate}  initData={rdata} />
-        </section>
+        </motion.div>
         <section className="page-footer">
             
         </section>
-    </div>
+    </motion.div >
 }
 const SearchComponent = ()=>{
     const navigate = useNavigate()
@@ -58,9 +51,7 @@ const RoomsMod = ()=>{
     return <Routes>
         <Route path=":id" element={<ModComponent />} />
         <Route path="" element={<SearchComponent />} />
-    </Routes>
-    //fetch with that id use location
-   
+    </Routes>   
 }
 
 export default RoomsMod

@@ -1,10 +1,10 @@
 import ClientsTableHistory from "../../components/ClientsTable/ClientsTableHistory"
-import userData from "./ClientInterfaces"
 import { Routes,Route, Navigate, useNavigate, useParams } from "react-router-dom"
 import ClientsTableInfo from "../../components/ClientsTable/ClientsTableInfo"
 import ROUTES from "../../constants/Routes"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import APIROUTES from "../../constants/ApiRoutes"
+import { clientsData } from "../../types"
 const ClientsShow = ()=>{
     return <Routes>
         <Route path=":id" element={<ShowComponent />} />
@@ -51,7 +51,7 @@ return <div className="page">
         </section>
     </div>
 }
-const ClientInfo = ({userData} : {userData : userData})=>{
+const ClientInfo : React.FC<{userData : clientsData}>= ({userData})=>{
     return <div className="info-box">
         <p className="info-box-title">MetaData: </p>
         <div className="info-box-data">

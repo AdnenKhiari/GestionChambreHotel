@@ -1,24 +1,15 @@
-import {bookingsData,bookingSearchData} from "./BookingsInterfaces"
 import Joi from "joi";
 import UniversalFormUi from "../../components/UniversalForm/UniversalFormUi";
-import { IsearchData } from "../../components/UniversalTable/TableSchema";
 import BookingCardContainer from "../../components/BookingCardContainer"
 import { useEffect, useState } from "react";
 
 import { FormProvider, useFieldArray, useForm, useFormContext } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { format_date } from "../../lib/Utils";
-import { watch } from "fs";
+import {  IUniversalTable } from "../../types";
 
 
-export interface IformData {
-    name: string,
-    label: string
-    type: "text" | "email" | "number" | "date" | "select"
-    selectOptions? : {value : string,label: string}[]
-}
 
-const formData  : IsearchData[] = [
+const formData  : IUniversalTable.IsearchData[] = [
     {
         name:"NAME",
         label: "Name",

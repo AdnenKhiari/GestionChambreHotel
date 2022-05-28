@@ -1,10 +1,20 @@
-import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
+import { UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetError, UseFormSetValue } from "react-hook-form";
 import Select from "react-select";
-import Joi from "joi";
+import { IUniversalForm } from "../../types";
 
-const UniversalFormUi = ({register,errors,formData,initData,setValue,reset,handleSubmit,hideSubmit = false} : {register: any,errors: any,formData: any,initData: any,setValue: any,reset: any,handleSubmit: any,hideSubmit?: boolean} )=>{
-    //make the inputs and form a individual component that's shared between the uni form and this
+interface IUniFormUi {
+    register: UseFormRegister<any>,
+    errors: any,
+    formData: IUniversalForm.IformData[],
+    initData: any,
+    setValue: UseFormSetValue<any>,
+    reset: UseFormReset<any>,
+    handleSubmit: (dt: any)=> void,
+    hideSubmit?: boolean
+}
+
+const UniversalFormUi : React.FC<IUniFormUi>= ({register,errors,formData,initData,setValue,reset,handleSubmit,hideSubmit = false})=>{
+    
     const getSelectDefaultValue = (sd : any)=>{
         let res :any = null
         if(initData!==undefined)

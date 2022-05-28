@@ -1,12 +1,11 @@
 import UniversalTable from "../UniversalTable"
-import {IsearchData,ItableData} from "../UniversalTable/TableSchema"
 import joi from "joi"
-import React from "react"
 import APIROUTES from "../../constants/ApiRoutes"
 import { useNavigate, useParams } from "react-router-dom"
 import Routes from "../../constants/Routes"
+import { IUniversalTable } from "../../types"
 
-const searchInputs  : IsearchData[] = [
+const searchInputs  : IUniversalTable.IsearchData[] = [
     {
         name: "bookingId",
         type: "number",
@@ -29,7 +28,7 @@ const searchInputs  : IsearchData[] = [
     }
 ]
 
-const datatable  = (body: any) : ItableData => ({
+const datatable  = (body: any) : IUniversalTable.ItableData => ({
     header:["Booking ID","Room ID","Check In","Check Out"],
     body: body
 })
@@ -45,9 +44,7 @@ const schema = joi.object({
 const ClientsTableHistory = ()=>{
     const {id} = useParams()
     const nav = useNavigate()
-    return <> 
-        <UniversalTable queryname="client-table-history" datatable={datatable} querypath={APIROUTES.CLIENTS.HISTORY(id)} title="History" onRowClick = {(dt: any[])=> nav(Routes.BOOKING.SHOW + dt[0])}  searchData={searchInputs} schema={schema} paginate={true} />
-    </>
+    return   <UniversalTable queryname="client-table-history" datatable={datatable} querypath={APIROUTES.CLIENTS.HISTORY(id)} title="History" onRowClick = {(dt: any[])=> nav(Routes.BOOKING.SHOW + dt[0])}  searchData={searchInputs} schema={schema} paginate={true} />
 }
 
 export default ClientsTableHistory

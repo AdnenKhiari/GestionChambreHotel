@@ -1,12 +1,7 @@
-import { Routes,Route, Navigate, useNavigate } from "react-router-dom"
-import userData from "./ClientInterfaces"
 import APIROUTES from "../../constants/ApiRoutes"
 import ClientsModAddModel from "./ClientsModAddModel"
-import ClientsTableInfo from "../../components/ClientsTable/ClientsTableInfo"
-import ROUTES from "../../constants/Routes"
-import { useQuery } from "react-query"
-import { domainToASCII } from "url"
 import { useMutateQuery } from "../../lib/Queries/useMutateQuery"
+
 const AddComponent = ()=>{
     const {payload : submitResponseData,isLoading : isMutationLoading, isError: isMutationError,mutate} = useMutateQuery(APIROUTES.CLIENTS.ADD,'POST',undefined,["client-table-info"])
 

@@ -1,6 +1,15 @@
 import axios from "axios"
+import { IUseQuery } from "../../types"
 import { useMutation, useQueryClient } from "react-query"
-export const useMutateQuery = (baseurl : string,method: "POST" | "PATCH" | "DELETE",success? : (data : any)=>any,queriesToInvalidate?: any[])=>{
+
+type QueryMutate = (
+    baseurl : string,
+    method: "POST" | "PATCH" | "DELETE",
+    success? : (data : any)=>any,
+    queriesToInvalidate?: any[]
+) => IUseQuery.IMutateResult
+
+export const useMutateQuery : QueryMutate = (baseurl,method,success,queriesToInvalidate) => {
     const client = useQueryClient() 
     const {isLoading,isError,isSuccess,data : payload,mutate} : {isLoading: boolean,isSuccess: boolean,isError: boolean,data:any,mutate : any} = useMutation((dataPost)=>{
         return axios.request({
@@ -17,7 +26,6 @@ export const useMutateQuery = (baseurl : string,method: "POST" | "PATCH" | "DELE
         onSuccess : (receiveddata)=>{
             if(queriesToInvalidate !== undefined){
                 queriesToInvalidate.forEach((qn)=>{
-                    console.log(qn)
                     client.resetQueries(qn)
                 })
             }

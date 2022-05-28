@@ -1,10 +1,10 @@
 import OffersTableHistory from "../../components/Offers Table/OffersTableHistory"
-import offerData from "./OffersInterfaces"
 import { Routes,Route, Navigate, useNavigate, useParams } from "react-router-dom"
 import OffersTableInfo from "../../components/Offers Table/OffersTableInfo"
 import ROUTES from "../../constants/Routes"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import APIROUTES from "../../constants/ApiRoutes"
+import {offerData} from "../../types"
 const OffersShow = ()=>{
     return <Routes>
         <Route path=":id" element={<ShowComponent />} />
@@ -29,7 +29,7 @@ const ShowComponent = ()=>{
     if(isLoading)
         return <p className="warning-color">Loading !</p>
     else
-        console.log(odata)
+  //      console.log(odata)
 
 return <div className="page">
         <section className="page-header">
@@ -50,7 +50,7 @@ return <div className="page">
         </section>
     </div>
 }
-const OfferInfo = ({data} : {data : offerData})=>{
+const OfferInfo : React.FC<{data : offerData}>= ({data})=>{
     return <div className="info-box">
         <p className="info-box-title">MetaData: </p>
         <div className="info-box-data">

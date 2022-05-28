@@ -1,12 +1,11 @@
-import UniversalTable from "../UniversalTable"
-import {IsearchData,ItableData} from "../UniversalTable/TableSchema"
+import {IUniversalTable} from "../../types"
 import joi from "joi"
-import React from "react"
 import APIROUTES from "../../constants/ApiRoutes"
 import { useNavigate, useParams } from "react-router-dom"
 import Routes from "../../constants/Routes"
+import UniversalTable from "../UniversalTable"
 
-const searchInputs  : IsearchData[] = [
+const searchInputs  : IUniversalTable.IsearchData[] = [
     {
         name: "bookingId",
         type: "number",
@@ -29,7 +28,7 @@ const searchInputs  : IsearchData[] = [
     }
 ]
 
-const datatable  = (body: any) : ItableData => ({
+const datatable  = (body: any) : IUniversalTable.ItableData => ({
     header:["Booking ID","Room Number","Check In","Check Out"],
     body: body
 })

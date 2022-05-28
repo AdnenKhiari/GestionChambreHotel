@@ -7,12 +7,16 @@ import ROUTES from "../../constants/Routes"
 
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../lib/context";
+
 const schema = Joi.object({
     email: Joi.string().required().label("Email"),
     password: Joi.string().required().label("Password")
 })
 
-const Login = ({userInfo,setUserInfo} : {userInfo:any,setUserInfo: any})=>{
+const Login = ()=>{
+    const user = useContext(UserContext)
     const {payload : udata,isLoading : isMutationLoading, isError: isMutationError,mutate} = useMutateQuery(APIROUTES.USERS.LOGIN,'POST',undefined,["get-connected-user"])
     const { register,handleSubmit, setValue,control, watch, reset , formState: { errors }} = useForm({
         shouldUnregister: true,
@@ -21,18 +25,18 @@ const Login = ({userInfo,setUserInfo} : {userInfo:any,setUserInfo: any})=>{
     const [loginError,setLoginError] = useState("")
 
     useEffect(()=>{
-        setUserInfo(udata)
+        user?.setUserInfo(udata)
     },[udata])
 
     useEffect(()=>{
         if(isMutationError){
             setLoginError("Bad Email or password");
-            setUserInfo(null)
+            user?.setUserInfo(null)
         }
     },[isMutationError])
 
 
-    if(userInfo){
+    if(user?.userInfo){
         return <Navigate to={ROUTES.BOOKING.SHOW} />
     }
 

@@ -11,7 +11,7 @@ import OffersPages from "./Pages/Offers/"
 import BookingsPages from "./Pages/Bookings/"
 import { useGetQuery } from './lib/Queries/useGetQuery';
 import Login from './Pages/Users/Login';
-
+import { UserContext } from './lib/context';
 function App() {  
   const [userInfo,setUserInfo] = useState(null)
   
@@ -28,7 +28,7 @@ function App() {
     return <p className="warning-color">Loading !</p>
 
   if(!userInfo || isError)
-    return <Login userInfo={userInfo} setUserInfo={setUserInfo} />
+    return <Login />
 
   return (
     <div className="App">
@@ -37,7 +37,8 @@ function App() {
                 <Menu />
               </div>
               <div className="main-block">
-                <Heading userInfo={userInfo}  setUserInfo={setUserInfo}/> 
+                <UserContext.Provider value={{userInfo,setUserInfo}}>
+                <Heading /> 
                 <div className="main-content">
                 <Routes >
                   <Route path={ROUTES.CLIENTS.SHOW+"*"} element={<ClientsPages.ClientsShow />} />
@@ -63,6 +64,7 @@ function App() {
                   <Route path='/lel' element={<h1>Lel2</h1>} />
                 </Routes>
                 </div>
+                </UserContext.Provider>
               </div>
         </div>
         < Footer />

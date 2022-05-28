@@ -3,15 +3,10 @@ import React from "react"
 import {StaggerChildren,Slide} from "../lib/Animations"
 import {AnimatePresence, motion} from "framer-motion"
 import ROUTES from "../constants/Routes"
+import { IMenu } from "../types"
 
 
-interface ITmenuItem  { 
-    item : string,
-    imgSrc? : string,
-    link? : string,
-    subitem? : ITmenuItem[]
-}
-const QuickAccess : ITmenuItem[] =  [
+const QuickAccess : IMenu.ITmenuItem[] =  [
     {
         item:"Show Bookings",
         imgSrc:"/icons/BELL.svg",
@@ -40,7 +35,7 @@ const QuickAccess : ITmenuItem[] =  [
         link: ROUTES.OFFERS.SHOW
     } 
 ]
-const AllOptions: ITmenuItem[] =  [
+const AllOptions: IMenu.ITmenuItem[] =  [
     {
         item:"Clients",
         imgSrc:"/icons/ARROW.svg",
@@ -129,20 +124,15 @@ const Menu = ()=>{
             <p className="menu-title">Customize</p>
             <ul>
             {AllOptions.map((element,index) => {
-                return < MenuItem   key={index} imgSrc={element.imgSrc ? element.imgSrc : null } itemTitle={element.item} children = {element.subitem} link={element.link} />
+                return < MenuItem  key={index} imgSrc={element.imgSrc ? element.imgSrc : null } itemTitle={element.item} children = {element.subitem} link={element.link} />
             })}
             </ul>
         </nav>
     </div>
 }
-interface ITmenuItemParams  { 
-    imgSrc : string | null,
-    itemTitle : string,
-    children? : ITmenuItem[],
-    link: string | undefined
-}
-const MenuItem = ({imgSrc ,itemTitle,children,link } : ITmenuItemParams)=>{
-    const [subItem,setSubItem] = React.useState(false);
+
+const MenuItem : React.FC<IMenu.ITmenuItemParams> = ({imgSrc ,itemTitle,children,link })=>{
+    const [subItem,setSubItem] = React.useState<boolean>(false);
     return <li className = "menu-item " >
     <span className={"menu-item-header " + (subItem && children ? "expanded " : "")} onClick={(e)=>setSubItem(!subItem)}>{imgSrc && <img src={imgSrc} alt="" />} 
     {(link && <Link to={link} > <span className="item-title">{itemTitle}</span></Link>) || <span className="item-title">{itemTitle}</span>} 

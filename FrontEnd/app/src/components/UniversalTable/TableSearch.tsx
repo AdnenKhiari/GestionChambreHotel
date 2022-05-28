@@ -1,12 +1,18 @@
-import Joi, { number, object } from "joi" 
 import { useForm } from "react-hook-form";
 import Select from "react-select"
-import {IsearchData} from "./TableSchema"
+import { IUniversalTable } from "../../types"; 
 import { joiResolver } from '@hookform/resolvers/joi';
 import {Schema} from "joi"
-import {defaultStyle} from "../../Styles/components/selectstyle"
 import { useEffect, useState } from "react";
-const TableSearch = ({searchData,schema ,onValidate,paginate = false} : {searchData : IsearchData[],schema : Schema,onValidate: any,paginate? : boolean})=>{
+
+interface ISearchParams {
+    searchData : IUniversalTable.IsearchData[],
+    schema : Schema,
+    onValidate: any,
+    paginate? : boolean
+}
+
+const TableSearch : React.FC<ISearchParams> = ({searchData,schema ,onValidate,paginate = false})=>{
     //const inits : any = searchData.filter((dt)=>dt.selectOptions !== undefined).reduce((obj,current)=> ({...obj, [current.name] : current.selectOptions?.at(0)?.value }),{})
     const { register,handleSubmit, setValue,control, watch, reset , formState: { errors }} = useForm({
         shouldUnregister: true,

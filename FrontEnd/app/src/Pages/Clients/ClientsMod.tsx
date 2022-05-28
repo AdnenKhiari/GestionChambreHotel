@@ -1,4 +1,3 @@
-import userData from "./ClientInterfaces"
 import ClientsModAddModel from "./ClientsModAddModel"
 import { Routes,Route, Navigate, useNavigate, useParams } from "react-router-dom"
 import ClientsTableInfo from "../../components/ClientsTable/ClientsTableInfo"
@@ -6,16 +5,7 @@ import ROUTES from "../../constants/Routes"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import  APIROUTES from "../../constants/ApiRoutes"
 import { useMutateQuery } from "../../lib/Queries/useMutateQuery"
-/*const udata : userData = {
-    id: 1014,
-    here: true,
-    fullname:"Adnen Khiari",
-    cin: "12345+9",
-    address: "1 rue ibn jazzar manoba",
-    date_of_birth: "05-12-2001",
-    state: "S",
-    gender: "M"
-}*/
+
 const ModComponent = ()=>{
     const  {id } = useParams()
     const {payload : udata,isLoading,isError,refetch} = useGetQuery(['get-client-by-id',id],APIROUTES.CLIENTS.GETBYID(id))

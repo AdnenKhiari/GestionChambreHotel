@@ -1,4 +1,3 @@
-import roomData from "./RoomsInterfaces"
 import RoomsTableHistory from "../../components/RoomsTable/RoomsTableHistory"
 import { Routes,Route, Navigate, useNavigate, useParams } from "react-router-dom"
 import RoomsTableInfo from "../../components/RoomsTable/RoomsTableInfo"
@@ -6,6 +5,9 @@ import ROUTES from "../../constants/Routes"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import APIROUTES from "../../constants/ApiRoutes"
 import { getRoomCapacity, getRoomOptions, getRoomState, getRoomType } from "../../lib/Utils"
+import { roomData } from "../../types"
+import { motion } from "framer-motion"
+import { FadeInScale, Slide, StaggerChildren } from "../../lib/Animations"
 const RoomsShow = ()=>{
     return <Routes>
         <Route path=":id" element={<ShowComponent />} />
@@ -31,10 +33,10 @@ const ShowComponent = ()=>{
     if(isLoading)
         return <p className="warning-color">Loading !</p>
     else
-        console.log(rdata)
+//        console.log(rdata)
 
-return <div className="page">
-        <section className="page-header">
+return <motion.div className="page" variants={StaggerChildren(0.3,0)} initial="initial" exit="exit" animate="animate">
+        <motion.div  className="page-header" variants={Slide}>
             <div className="section-1">
                 <h1> Room:<span>#{rdata.id}</span> </h1>
                 {<div className={"labelitem " + (rdata.state === 'F' ? "success" : "danger") }>{getRoomState(rdata.state)}</div>}
@@ -43,17 +45,17 @@ return <div className="page">
                 <p>Room Capacity:<span>{getRoomCapacity(rdata.capacity)}</span></p>
                 <p>Room Number:<span>{rdata.room_number}</span></p>
             </div>
-        </section>
-        <section className="page-body">
+        </motion.div >
+        <motion.div  className="page-body" variants={Slide}>
             <RoomsInfo data={rdata}/>
             <RoomsTableHistory />
-        </section>
+        </motion.div >
         <section className="page-footer">
             
         </section>
-    </div>
+    </motion.div>
 }
-const RoomsInfo = ({data} : {data : roomData})=>{
+const RoomsInfo  : React.FC<{data : roomData}>= ({data})=>{
     return <div className="info-box">
         <p className="info-box-title">MetaData: </p>
         <div className="info-box-data">

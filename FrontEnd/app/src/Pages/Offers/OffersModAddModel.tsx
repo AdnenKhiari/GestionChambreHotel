@@ -1,17 +1,9 @@
-import offerData from "./OffersInterfaces"
 import joi from "joi";
 import UniversalForm from "../../components/UniversalForm";
-import { IsearchData } from "../../components/UniversalTable/TableSchema";
 
-export interface IformData {
-    name: string,
-    label: string
-    type: "text" | "email" | "number" | "date" | "select"
-    selectOptions? : {value : string,label: string}[]
-}
+import { IUniversalForm,offerData } from "../../types";
 
-
-const formData  : IsearchData[] = [
+const formData  : IUniversalForm.IformData[] = [
     {
         name:"name",
         label: "Offer Name",

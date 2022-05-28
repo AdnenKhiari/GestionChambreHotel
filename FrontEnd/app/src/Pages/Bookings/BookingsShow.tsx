@@ -1,12 +1,13 @@
 import BookingsTableInfo from "../../components/BookingsTable/BookingsTableInfo"
-import { Routes,Route, Navigate, useNavigate, useParams } from "react-router-dom"
+import { Routes,Route, useNavigate, useParams } from "react-router-dom"
 import ROUTES from "../../constants/Routes"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import APIROUTES from "../../constants/ApiRoutes"
 import TableContent from "../../components/UniversalTable/TableContent"
-import { ItableData } from "../../components/UniversalTable/TableSchema"
 import { format_date, getRoomCapacity ,getRoomOptions,getRoomType} from "../../lib/Utils"
-import moment from "moment"
+import {  bookingsData, IUniversalTable, roomData } from "../../types"
+import { motion } from "framer-motion"
+import { FadeInTrans,  StaggerChildren } from "../../lib/Animations"
 const ClientsShow = ()=>{
     return <Routes>
         <Route path=":id" element={<ShowComponent />} />
@@ -30,8 +31,8 @@ const ShowComponent = ()=>{
     if(isLoading)
         return <p className="warning-color">Loading !</p>
     else
-        console.log(bdata)
-
+ //       console.log(bdata)
+ 
 return <div className="page">
         <section className="page-header">
             <div className="section-1">
@@ -44,29 +45,29 @@ return <div className="page">
             </div>
         </section>
         <section className="page-body">
-            <BookingInfo bookingData={bdata}/>
+            <BookingInfo bookingData={bdata as bookingsData}/>
         </section>
         <section className="page-footer">
             
         </section>
     </div>
 }
-const BookingInfo = ({bookingData} : {bookingData : any})=>{
-    return <div className="card-container">
-        {bookingData && bookingData.ROOMS && bookingData.ROOMS.map((dt: any)=>{
-            return <CardItem roomData={dt} />
+const BookingInfo : React.FC<{bookingData : bookingsData}> = ({bookingData})=>{
+    return <motion.div className="card-container" variants={StaggerChildren(0.5,0)} initial="initial" exit="exit" animate="animate">
+        {bookingData && bookingData.ROOMS && bookingData.ROOMS.map((dt: roomData,index: number)=>{
+            return <CardItem key={index *102 } roomData={dt} />
         })}
-        </div>
+        </motion.div>
 
 }
 
-const datatable  = (body: any) : ItableData => ({
+const datatable  = (body: any) : IUniversalTable.ItableData => ({
     header:["Client ID","Name","Birth Date","Age"],
     body: body
 }) 
-const CardItem = ({roomData} : {roomData : any})=>{
+const CardItem = ({roomData} : {roomData : roomData})=>{
     const nav = useNavigate()
-    return <div className="card-item">
+    return <motion.div className="card-item" variants={FadeInTrans}>
         <div className="card-section-1">
             <div className="card-details">
                 <div className="card-details-header" style={{cursor: "pointer"}} onClick={(e)=> nav(ROUTES.ROOMS.SHOW + roomData.ROOM_NUMBER )}>
@@ -111,6 +112,6 @@ const CardItem = ({roomData} : {roomData : any})=>{
                     }).map((client: any)=>  Object.values(client)) )} />
             </div>
         </div>
-    </div>
+    </motion.div>
 }
 export default ClientsShow

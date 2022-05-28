@@ -1,34 +1,20 @@
 import { FormProvider, useFieldArray, useForm, useFormContext } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
-import Joi from "joi";
-import TableContent from "../UniversalTable/TableContent"
-import { ItableData } from "../UniversalTable/TableSchema"
-import UniversalFormUi from "../UniversalForm/UniversalFormUi";
-import Select from "react-select";
-import { useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import ClientsTableInfo from "../ClientsTable/ClientsTableInfo";
 import RoomsTableInfo from "../RoomsTable/RoomsTableInfo";
-import {roomData} from "../../Pages/Bookings/BookingsInterfaces"
 import {CardItem} from "./Cards"
 import OffersTableInfo from "../Offers Table/OffersTableInfo";
-export interface IformData {
-    name: string,
-    label: string
-    type: "text" | "email" | "number" | "date" | "select"
-    selectOptions? : {value : string,label: string}[]
-}
+import { BookingContext } from "../../lib/context";
+import { RoomBookingType, bkroomData } from "../../types";
+import { motion } from "framer-motion";
+import { StaggerChildren } from "../../lib/Animations";
 
+const BookingCardContainer : React.FC<{initData:any,mutate: (dt: any) => void}> = ({initData,mutate})=>{
 
-const BookingCardContainer = ({initData,mutate} : {initData:any,mutate:any})=>{
-
-    const [compstate,setComState] : ['SR' | 'SC' | 'R'  | 'SO' | 'SC' ,any] = useState('R')
+    const [compstate,setComState] = useState<RoomBookingType>('R')
     const [selectedIndexRoom,setSelectedIndexRoom] = useState(-1)
-
     const { handleSubmit} = useFormContext()
-    /*const methods = useForm({
-        resolver: joiResolver(schema)
-    })
-    const { watch,control, register,setValue,handleSubmit } = methods;*/
+
     const { fields, append, remove } = useFieldArray({
       name: "ROOMS", // unique name for your Field Array
     });
@@ -64,8 +50,6 @@ const BookingCardContainer = ({initData,mutate} : {initData:any,mutate:any})=>{
                     })
                 }
             }
-           // console.log(booking_data)
-            console.log("TO SEND",data_to_send)
             mutate(data_to_send)
         })()
     }
@@ -77,12 +61,12 @@ const BookingCardContainer = ({initData,mutate} : {initData:any,mutate:any})=>{
        setSelectedIndexRoom(-1)
        setComState('SR')
        }}> Add A Room</button>
-     </div>
-
+    </div>
+    <BookingContext.Provider value={{selectedIndexRoom,setSelectedIndexRoom,setComState}}>
    {compstate === 'R' ? ( <>  
-    <div className="card-container">
+    <div className="card-container" >
     {fields && fields.map((room: any,index: number)=>{
-        return <CardItem  setSelectedIndexRoom={setSelectedIndexRoom} setComState={setComState} key={room.id} index={index} />
+        return <CardItem  key={room.id} index={index} />
     })}
     </div>
     <div className="rooms-bookings-footer">
@@ -90,34 +74,37 @@ const BookingCardContainer = ({initData,mutate} : {initData:any,mutate:any})=>{
     </div>
     </>  
     ) : compstate === 'SR' ?  ( 
-        <SelectRoom selectedIndexRoom={selectedIndexRoom} setComState={setComState} append={append} />
+        <SelectRoom  append={append} />
     ) : compstate === 'SO'  ? (
-        <SelectOffer selectedIndexRoom={selectedIndexRoom} setComState={setComState} /> 
-    ) : compstate === 'SC' &&  <SelectClients append={append} selectedIndexRoom={selectedIndexRoom} setComState={setComState}  /> 
+        <SelectOffer  /> 
+    ) : compstate === 'SC' &&  <SelectClients   /> 
     }
+    </BookingContext.Provider>
     </>
 
 }
 
-const SelectClients = ({selectedIndexRoom,setComState,append} : {selectedIndexRoom: any,setComState: any,append: any})=>{
+const SelectClients = ()=>{
    const {setValue,watch} = useFormContext()
-    const onRowClick = (row : any)=>{
+   const {selectedIndexRoom,setComState} = useContext(BookingContext) || {}
+   const onRowClick = (row : any)=>{
         const clients  : any[] = watch(`ROOMS.${selectedIndexRoom}.CLIENTS`)
         const new_row = [row[0],row[1],row[3],row[4]]
         clients.push(new_row)
         setValue(`ROOMS.${selectedIndexRoom}.CLIENTS` as const,clients)
-        setComState('R')
+        setComState?.('R') 
     }
     return  <ClientsTableInfo  onRowClick={onRowClick}/>
 }
 
-const SelectRoom = ({selectedIndexRoom,setComState,append} : {selectedIndexRoom:number,setComState: any,append: any})=>{
+const SelectRoom : React.FC<any>= ({append})=>{
+    const {selectedIndexRoom,setComState} = useContext(BookingContext) || {}
     const {setValue} = useFormContext()
     const onRowClick = (row : any)=>{
         if(row[5] !== 'F')
             return;
 
-        const new_room :roomData  = {
+        const new_room : bkroomData  = {
             ROOM_ID: row[0],
             ROOM_NUMBER: row[1],
             ROOM_CAPACITY: row[2],
@@ -137,20 +124,21 @@ const SelectRoom = ({selectedIndexRoom,setComState,append} : {selectedIndexRoom:
             setValue(`ROOMS.${selectedIndexRoom}.ROOM_TYPE`,new_room.ROOM_TYPE)
             setValue(`ROOMS.${selectedIndexRoom}.ROOM_OPTION`,new_room.ROOM_OPTION)
         }
-        setComState('R')
+        setComState?.('R')
     }
     return <RoomsTableInfo  onRowClick={onRowClick}/>
 }
 
-const SelectOffer = ({selectedIndexRoom,setComState} : {selectedIndexRoom: any,setComState: any})=>{
+const SelectOffer = ()=>{
     const {setValue} = useFormContext()
+    const {selectedIndexRoom,setComState} = useContext(BookingContext) || {}
     const onRowClick = (row : any)=>{
         if(row[3])
             return;
         setValue(`ROOMS.${selectedIndexRoom}.OFFER_ID` as const,row[0])
         setValue(`ROOMS.${selectedIndexRoom}.OFFER_NAME` as const,row[1])
         setValue(`ROOMS.${selectedIndexRoom}.OFFER_PRICE` as const,row[4])
-        setComState('R')
+        setComState?.('R')
     }
     return <OffersTableInfo  onRowClick={onRowClick}/>
 }

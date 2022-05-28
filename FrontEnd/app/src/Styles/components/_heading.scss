@@ -24,4 +24,11 @@ header{
         }
     }
 
+    #lgout{
+        font-size: $h3size;
+        cursor: pointer;
+        font-family: $secondary_font;
+        color: Primary(1);
+    }
+
 }

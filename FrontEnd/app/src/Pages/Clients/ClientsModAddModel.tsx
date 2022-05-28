@@ -1,17 +1,7 @@
-import userData from "./ClientInterfaces"
-import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
 import joi from "joi";
-import { useEffect } from "react";
-import Select from "react-select";
 import UniversalForm from "../../components/UniversalForm";
 
-export interface IformData {
-    name: string,
-    label: string
-    type: "text" | "email" | "number" | "date" | "select"
-    selectOptions? : {value : string,label: string}[]
-}
+import { IUniversalForm,clientsData } from "../../types";
 
 const schema = joi.object({
     fullname: joi.string().required().label("Full Name"),
@@ -23,7 +13,7 @@ const schema = joi.object({
     state: joi.allow("S","D","M").required().label("State"),
 })
 
-const formData : IformData[] = [
+const formData : IUniversalForm.IformData[] = [
     {
         name:"fullname",
         label: "Full Name",
@@ -64,7 +54,7 @@ const formData : IformData[] = [
 
 ]
 
-const ClientsModAddModel = ({mutate,initData} : {mutate : any,initData? : userData})=>{
+const ClientsModAddModel = ({mutate,initData} : {mutate : any,initData? : clientsData})=>{
 
     return <UniversalForm initData={initData}  mutate = {mutate} schema={schema} formData={formData} />
 }

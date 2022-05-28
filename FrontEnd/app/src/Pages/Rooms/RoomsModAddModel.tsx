@@ -1,7 +1,6 @@
-import userData from "./RoomsInterfaces"
 import joi from "joi";
 import UniversalForm from "../../components/UniversalForm";
-import { IsearchData } from "../../components/UniversalTable/TableSchema";
+import { IUniversalForm, roomData } from "../../types";
 
 export interface IformData {
     name: string,
@@ -11,7 +10,7 @@ export interface IformData {
 }
 
 
-const formData  : IsearchData[] = [
+const formData  : IUniversalForm.IformData[] = [
 
     {
         name: "room_number",
@@ -53,9 +52,9 @@ const schema = joi.object({
     state: joi.allow("F","O","M","C","").required().label("Room State"),
 })
 
-const ClientsModAddModel = ({mutate,initData} : {mutate : any,initData? : userData})=>{
+const RoomsModAddModel : React.FC<{mutate : (dt: any) => void,initData? : roomData}> = ({mutate,initData} )=>{
 
     return <UniversalForm initData={initData}  mutate = {mutate} schema={schema} formData={formData} />
 }
 
-export default ClientsModAddModel
+export default RoomsModAddModel

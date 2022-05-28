@@ -1,21 +1,22 @@
-import { joiResolver } from "@hookform/resolvers/joi";
-import Joi from "joi";
 import TableContent from "../UniversalTable/TableContent"
-import { ItableData } from "../UniversalTable/TableSchema"
 import Select from "react-select";
 import { useFormContext } from "react-hook-form";
+import { IUniversalTable } from "../../types";
+import { BookingContext } from "../../lib/context";
+import { useContext } from "react";
 
-
-const datatable  = (body: any) : ItableData => ({
+const datatable  = (body: any) : IUniversalTable.ItableData => ({
     header:["Client ID","Name","Birth Date","Age"],
     body: body
 }) 
 
-export const CardItem = ({setSelectedIndexRoom,setComState,index} : {setSelectedIndexRoom: any,setComState: any,index:number} )=>{
+export const CardItem = ({index} : {index:number} )=>{
     const {watch,setValue} = useFormContext()
-    return <div className="card-item">
+    const {setSelectedIndexRoom,setComState} = useContext(BookingContext) || {}
+
+    return <div className="card-item" >
     <div className="card-section-1">
-            <Details setSelectedIndexRoom={setSelectedIndexRoom} setComState={setComState} index={index} />
+            <Details index={index} />
     </div>
     <div className="card-section-seperator"></div>
     <div className="card-section-2">
@@ -28,8 +29,8 @@ export const CardItem = ({setSelectedIndexRoom,setComState,index} : {setSelected
             }} 
             tableData={datatable(watch(`ROOMS.${index}.CLIENTS` as const))}/>
             <button onClick={(e)=>{
-                setSelectedIndexRoom(index)
-                setComState('SC')
+                setSelectedIndexRoom?.(index)
+                setComState?.('SC')
             }
             }>Add Client</button>
         </div>
@@ -39,7 +40,8 @@ export const CardItem = ({setSelectedIndexRoom,setComState,index} : {setSelected
 
 const selectOptions = [{label: "All Inclusive",value: "AI"},{label: "Soft Inclusive",value: "SI"},{label: "Full Board",value: "F"},{label: "Half Board",value: "H"},{label: "Lodge Only",value: "N"}]
 
-export const Details = ({setSelectedIndexRoom,setComState,index} : {setSelectedIndexRoom:any,setComState: any,index: number})=>{
+export const Details : React.FC<{index: number}>= ({index})=>{
+    const {setSelectedIndexRoom,setComState} = useContext(BookingContext) || {}
 
     const {watch,setValue,formState : {errors}} = useFormContext()
     return  <div className="card-details">
@@ -51,14 +53,14 @@ export const Details = ({setSelectedIndexRoom,setComState,index} : {setSelectedI
         <div className="card-details-body">
         <div className="card-detail-item">
             <button onClick={(e)=>{
-                setSelectedIndexRoom(index)
-                setComState('SO')
+                setSelectedIndexRoom?.(index)
+                setComState?.('SO')
             }
             }>Select Offer </button>
 
             <button onClick={(e)=>{
-                setSelectedIndexRoom(index)
-                setComState('SR')
+                setSelectedIndexRoom?.(index)
+                setComState?.('SR')
             }
             }>Update Room </button>
 
@@ -136,7 +138,7 @@ const RoomDetails = ({index} : {index: number})=>{
     </>
 }
 const OfferDetails = ({index} : {index: number})=>{
-    const {watch,setValue} = useFormContext()
+    const {watch} = useFormContext()
 
     return <> <div className="card-detail-item">
         <label >Offer Name : </label> 

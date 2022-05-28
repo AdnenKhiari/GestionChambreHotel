@@ -1,9 +1,9 @@
 import UniversalTable from "../UniversalTable"
-import {IsearchData,ItableData} from "../UniversalTable/TableSchema"
 import joi from "joi"
 import APIROUTES from "../../constants/ApiRoutes"
+import { IUniversalTable } from "../../types"
 
-const searchInputs  : IsearchData[] = [
+const searchInputs  : IUniversalTable.IsearchData[] = [
     {
         name: "id",
         type: "number",
@@ -26,7 +26,7 @@ const searchInputs  : IsearchData[] = [
     }
 ]
 
-const datatable  = (body: any) : ItableData => ({
+const datatable  = (body: any) : IUniversalTable.ItableData => ({
     header:["Booking ID","Name","Check In","Check Out"],
     body: body
 })
@@ -39,9 +39,7 @@ const schema = joi.object({
 })
 
 const ClientsTableInfo = ({onRowClick} : {onRowClick?: any})=>{
-    return <>
-        <UniversalTable queryname="bookings-table-info" datatable={datatable} querypath={APIROUTES.BOOKINGS.INFO} title="Bookings" onRowClick = {onRowClick}  searchData={searchInputs} schema={schema} paginate={true} />
-    </>
+    return <UniversalTable queryname="bookings-table-info" datatable={datatable} querypath={APIROUTES.BOOKINGS.INFO} title="Bookings" onRowClick = {onRowClick}  searchData={searchInputs} schema={schema} paginate={true} />
 }
 
 export default ClientsTableInfo

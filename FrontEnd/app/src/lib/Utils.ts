@@ -1,6 +1,6 @@
 import moment from "moment"
 
-export const getRoomCapacity : any = (type : string)=> {
+export const getRoomCapacity  :(type : 'S' | 'D' | 'T' | 'Q'  ) => string  | undefined = (type)=> {
     console.log(type)
     if(type === 'S')
         return 'Single'
@@ -11,13 +11,13 @@ export const getRoomCapacity : any = (type : string)=> {
     if(type === 'Q')
         return 'Quadruple'
 }
-export const getRoomType : any = (type : string)=> {
+export const getRoomType  :(type : ('R' | 'S')) => string  | undefined = (type)=> {
     if(type === 'R')
         return 'Room'
     if(type === 'S')
         return 'Suite'
 }
-export const getRoomOptions : any = (type : string)=> {
+export const getRoomOptions :(type : 'D' | 'P' | 'S') => string  | undefined = (type)=> {
     if(type === 'D')
         return 'Default view'
     if(type === 'P')
@@ -25,7 +25,7 @@ export const getRoomOptions : any = (type : string)=> {
     if(type === 'S')
         return 'Sea view'
 }
-export const getRoomState : any = (type : string)=> {
+export const getRoomState  :(type : 'F' | 'O' | 'M' | 'C') => string  | undefined = (type)=> {
     if(type === 'F')
         return 'Free'
     if(type === 'O')
