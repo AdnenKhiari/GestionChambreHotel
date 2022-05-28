@@ -7,6 +7,9 @@ import { useMutateQuery } from "../../lib/Queries/useMutateQuery"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import BookingsTableInfo from "../../components/BookingsTable/BookingsTableInfo"
 import { format_date } from "../../lib/Utils"
+import { LoadingCercle } from "../../components/LoadingCercle"
+import { motion } from "framer-motion"
+import { FadeInScale, StaggerChildren } from "../../lib/Animations"
 const ModComponent = ()=>{
 
     const getInitData = (dt: any )=>{
@@ -31,21 +34,21 @@ const ModComponent = ()=>{
     if(isError)
         return <h1 className="danger-color">Error !</h1>
     if(isLoading)
-        return <p className="warning-color">Loading !</p>
+        return  <LoadingCercle/>
 
-    return <div className="page">
-    <section className="page-header">
+    return <motion.div className="page" variants={StaggerChildren(0.1,0)} initial="initial" exit="exit" animate="animate">
+    <motion.div className="page-header" variants={FadeInScale}>
         <div className="section-1">
             <h1>Modify A Booking</h1>
         </div>            
-    </section>
+    </motion.div>
     
-    <section className="page-body">
+    <motion.div className="page-body" variants={FadeInScale}>
     {<BookingsModAddModel mutate={mutate} initData={getInitData(initData)}/>}
-    </section>
+    </motion.div>
     <section className="page-footer">
     </section>
-</div>
+</motion.div>
 }
 
 const SearchComponent = ()=>{

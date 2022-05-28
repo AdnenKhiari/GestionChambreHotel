@@ -8,6 +8,7 @@ import { getRoomCapacity, getRoomOptions, getRoomState, getRoomType } from "../.
 import { roomData } from "../../types"
 import { motion } from "framer-motion"
 import { FadeInScale, Slide, StaggerChildren } from "../../lib/Animations"
+import { LoadingCercle } from "../../components/LoadingCercle"
 const RoomsShow = ()=>{
     return <Routes>
         <Route path=":id" element={<ShowComponent />} />
@@ -31,7 +32,7 @@ const ShowComponent = ()=>{
     if(isError)
         return <h1 className="danger-color">Error !</h1>
     if(isLoading)
-        return <p className="warning-color">Loading !</p>
+        return <LoadingCercle/>
     else
 //        console.log(rdata)
 

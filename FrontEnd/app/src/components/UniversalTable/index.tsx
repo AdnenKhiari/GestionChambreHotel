@@ -5,6 +5,7 @@ import {ObjectPropertiesSchema} from "joi"
 import {useUrlParams} from "../../lib/Queries/useUrlParams"
 import { motion } from "framer-motion"
 import { Slide } from "../../lib/Animations"
+import { LoadingCercle } from "../LoadingCercle"
 interface IUnitableParams{
      queryname: string,
      querypath: string,
@@ -24,7 +25,7 @@ const UniversalTable : React.FC<IUnitableParams> = ({queryname,querypath,title,s
          <h2><span className="border"></span>{title}</h2>
          <TableSearch  paginate={paginate} onValidate={onValidate} searchData={searchData} schema={schema} />
          </div>
-         {isLoading && <h1>Loading...</h1> }
+         {isLoading && <LoadingCercle/> }
          {!isLoading && isError && <h1>Error !</h1> }
          {!isError && !isLoading && payload  && <TableContent tableData={datatable(payload.data)} onclick={onRowClick ? onRowClick : (dt : any)=>console.log(dt)}/>}
      </motion.div>

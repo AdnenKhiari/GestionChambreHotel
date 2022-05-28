@@ -5,6 +5,9 @@ import ROUTES from "../../constants/Routes"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import APIROUTES from "../../constants/ApiRoutes"
 import { clientsData } from "../../types"
+import { LoadingCercle } from "../../components/LoadingCercle"
+import { motion } from "framer-motion"
+import { Slide, StaggerChildren } from "../../lib/Animations"
 const ClientsShow = ()=>{
     return <Routes>
         <Route path=":id" element={<ShowComponent />} />
@@ -27,29 +30,28 @@ const ShowComponent = ()=>{
     if(isError)
         return <h1 className="danger-color">Error !</h1>
     if(isLoading)
-        return <p className="warning-color">Loading !</p>
-    else
-        console.log(udata)
+        return  <LoadingCercle/>
 
-return <div className="page">
-        <section className="page-header">
+
+return  <motion.div className="page" variants={StaggerChildren(0.3,0)} initial="initial" exit="exit" animate="animate">
+        <motion.div  className="page-header" variants={Slide}>
             <div className="section-1">
                 <h1> Client:<span>#{udata.id}</span> </h1>
                 <div className={"labelitem " + (udata.here ? "success" : "danger") }>{udata.here ? "IN" : "OUT"}</div>
             </div>            
-            <div className="section-2">
+            <div className="section-2" >
                 <p>Booking ID:<span>#2402</span>  </p>
                 <p>Room:<span>102</span></p>
             </div>
-        </section>
-        <section className="page-body">
+        </motion.div >
+        <motion.div  className="page-body" variants={Slide}>
             <ClientInfo userData={udata}/>
             <ClientsTableHistory/>
-        </section>
+        </motion.div >
         <section className="page-footer">
             
         </section>
-    </div>
+    </motion.div>
 }
 const ClientInfo : React.FC<{userData : clientsData}>= ({userData})=>{
     return <div className="info-box">

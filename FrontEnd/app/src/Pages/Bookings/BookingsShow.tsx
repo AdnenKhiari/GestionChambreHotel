@@ -7,7 +7,8 @@ import TableContent from "../../components/UniversalTable/TableContent"
 import { format_date, getRoomCapacity ,getRoomOptions,getRoomType} from "../../lib/Utils"
 import {  bookingsData, IUniversalTable, roomData } from "../../types"
 import { motion } from "framer-motion"
-import { FadeInTrans,  StaggerChildren } from "../../lib/Animations"
+import { FadeInTrans,  Slide,  StaggerChildren } from "../../lib/Animations"
+import { LoadingCercle } from "../../components/LoadingCercle"
 const ClientsShow = ()=>{
     return <Routes>
         <Route path=":id" element={<ShowComponent />} />
@@ -29,12 +30,12 @@ const ShowComponent = ()=>{
     if(isError)
         return <h1 className="danger-color">Error !</h1>
     if(isLoading)
-        return <p className="warning-color">Loading !</p>
+        return  <LoadingCercle/>
     else
  //       console.log(bdata)
  
-return <div className="page">
-        <section className="page-header">
+return <motion.div className="page" variants={StaggerChildren(0.3,0)} initial="initial" exit="exit" animate="animate">
+        <motion.div className="page-header" variants={Slide}>
             <div className="section-1">
                 <h1>Booking:<span>#{bdata.BOOKING_ID}</span> </h1>
                 <div className={"labelitem " + (new Date(bdata.DATE_CHECKOUT) > new Date() ? "success" : "danger") }>{new Date(bdata.DATE_CHECKOUT) > new Date() ? "ACTIVE" : "OFF"}</div>
@@ -43,14 +44,14 @@ return <div className="page">
                 <p>Check IN:<span>{ format_date(bdata.DATE_CHECKIN)}</span>  </p>
                 <p>Check OUT:<span>{format_date(bdata.DATE_CHECKOUT)}</span></p>
             </div>
-        </section>
-        <section className="page-body">
+        </motion.div>
+        <div >
             <BookingInfo bookingData={bdata as bookingsData}/>
-        </section>
+        </div>
         <section className="page-footer">
             
         </section>
-    </div>
+    </motion.div>
 }
 const BookingInfo : React.FC<{bookingData : bookingsData}> = ({bookingData})=>{
     return <motion.div className="card-container" variants={StaggerChildren(0.5,0)} initial="initial" exit="exit" animate="animate">

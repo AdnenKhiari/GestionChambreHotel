@@ -5,6 +5,9 @@ import ROUTES from "../../constants/Routes"
 import { useGetQuery } from "../../lib/Queries/useGetQuery"
 import  APIROUTES from "../../constants/ApiRoutes"
 import { useMutateQuery } from "../../lib/Queries/useMutateQuery"
+import { LoadingCercle } from "../../components/LoadingCercle"
+import { motion } from "framer-motion"
+import { FadeInScale,  StaggerChildren } from "../../lib/Animations"
 /*const udata : userData = {
     id: 1014,
     here: true,
@@ -22,9 +25,9 @@ const ModComponent = ()=>{
     if(isError)
         return <h1 className="danger-color">Error !</h1>
     if(isLoading)
-        return <p className="warning-color">Loading !</p>
-    return <div className="page">
-    <section className="page-header">
+        return  <LoadingCercle/>
+    return <motion.div className="page" variants={StaggerChildren(0.1,0)} initial="initial" exit="exit" animate="animate">
+    <motion.div className="page-header" variants={FadeInScale}>
     <div className="section-1">
         <h1>Updating Offer:<span>#{odata.id}</span> </h1>
         <div className={"labelitem " + (new Date(odata.date_end) <= new Date() ? "success" : "danger") }>{odata.here ? "Active" : "Inactive"}</div>
@@ -32,13 +35,13 @@ const ModComponent = ()=>{
     <div className="section-2">
         <p>Price :<span>{odata.price}</span> </p>
     </div>
-    </section>
-    <section className="page-body">
+    </motion.div>
+    <motion.div className="page-body" variants={FadeInScale}>
         <OffersModAddModel mutate={mutate} initData={odata} />
-    </section>
+    </motion.div>
     <section className="page-footer">
     </section>
-</div>
+</motion.div>
 }
 const SearchComponent = ()=>{
     const navigate = useNavigate()

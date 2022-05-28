@@ -12,6 +12,7 @@ import BookingsPages from "./Pages/Bookings/"
 import { useGetQuery } from './lib/Queries/useGetQuery';
 import Login from './Pages/Users/Login';
 import { UserContext } from './lib/context';
+import { LoadingCercle } from './components/LoadingCercle';
 function App() {  
   const [userInfo,setUserInfo] = useState(null)
   
@@ -25,7 +26,7 @@ function App() {
   })
   
   if(isLoading)
-    return <p className="warning-color">Loading !</p>
+    return  <LoadingCercle/>
 
   if(!userInfo || isError)
     return <Login />

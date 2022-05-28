@@ -68,3 +68,20 @@ export const Slide : Variants = {
     }
 }
 
+
+export const UpDown : Variants = {
+    initial:{
+        y:0
+    },
+    animate:{
+        y : [0,-50,0],
+        opacity: [1,0.7,1],
+        transition: {
+            type: "tween",
+            repeat: Infinity,
+            repeatType: "loop",
+            repeatDelay: 1.5,
+            duration: 0.5
+        }
+    }
+}

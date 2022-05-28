@@ -8,6 +8,7 @@ import { getRoomCapacity ,getRoomState} from "../../lib/Utils"
 import RoomsTableInfo from "../../components/RoomsTable/RoomsTableInfo"
 import { motion } from "framer-motion"
 import { FadeInScale, StaggerChildren } from "../../lib/Animations"
+import { LoadingCercle } from "../../components/LoadingCercle"
 
 const ModComponent = ()=>{
     const  {id } = useParams()
@@ -18,7 +19,8 @@ const ModComponent = ()=>{
     if(isError)
         return <h1 className="danger-color">Error !</h1>
     if(isLoading)
-        return <p className="warning-color">Loading !</p>
+        return  <LoadingCercle/>
+
 
     return <motion.div className="page" variants={StaggerChildren(0.1,0)} initial="initial" exit="exit" animate="animate">
         <motion.div className="page-header" variants={FadeInScale}>
