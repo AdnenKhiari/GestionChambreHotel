@@ -1,11 +1,11 @@
 import bodyParser from "body-parser"
 import express,{Express,Request,Response} from "express"
-import {testConnection,Init} from "./lib/QueryExecutor"
 import ApiControllers from "./controllers"
 import cors from "cors"
 import CookieParser from "cookie-parser"
-import { ErrorHandler } from "./Errors/ErrorHandler"
-import { exit } from "process"
+import { ErrorHandler, HandleUnexpectedError } from "./Errors/ErrorHandler"
+import oracledb, { getPool } from "oracledb"
+import { ca } from "date-fns/locale"
 //start an app instance
 const app : Express = express()
 require("dotenv").config()
@@ -22,11 +22,6 @@ app.use(cors({
     credentials: true
 }))
 
-//open pool connections to db
-Init()
-
-//Test db connection 
-testConnection()
 
 app.get("/",(req : Request,res : Response)=>{
     res.send("Hii")
@@ -36,20 +31,48 @@ app.use("/api",ApiControllers);
 
 app.use(ErrorHandler)
 
+const dbConfig : oracledb.PoolAttributes = {
+    password: "oracle",
+    user: "system",
+    connectString:"localhost/xe",
+    poolIncrement: 0,
+    poolMin: 4,
+    poolMax: 4
+}
+
+const InitServer = async ()=>{
+    try{
+        //create db pool
+        await oracledb.createPool(dbConfig)
+        app.listen(process.env.SERVER_PORT,()=>{
+            console.log("Working fine !")  
+        })
+    }catch(err){
+        HandleUnexpectedError(err as Error,1)
+    }
+}
+
+//Start the db connections and server
+InitServer()
+
+
 process.on("unhandledRejection",(reason: Error, promise: Promise<any>) => {
     throw reason;
 })
 
 process.on("uncaughtException", (error: Error) => {
-    console.log("Unexpected Error",error)
-    process.exit(1);
+    HandleUnexpectedError(error,1)
+});
+
+process.on("beforeExit",()=>{
+    try{
+        getPool().close(0)
+        console.log("Pool Closed ")
+    }catch(err){
+        HandleUnexpectedError(err as Error,1)
+    }
 })
 
-app.listen(process.env.SERVER_PORT,()=>{
-    console.log("Working fine !")  
+process.on("exit",(number)=>{
+    console.log("The Process Terminated with code ",number)
 })
-/*
-app.get("/*",(req,res)=>{
-    return res.sendFile()
-})
-*/

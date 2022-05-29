@@ -21,7 +21,7 @@ app.get("/:id",async (req,res,next)=>{
     try{
         const data = req.params
         const result = await BookingsModel.GetBookingById(data)
-        return res.json(result)
+        return res.send(result)
     }catch(err){
         return next(err)
     }
@@ -31,7 +31,7 @@ app.post("/",async (req,res,next)=>{
     try{
         const data = req.body
         const result = await BookingsModel.AddBooking(data)
-        return res.json(result)
+        return res.send("ok")
     }catch(err){
         return next(err)
     }
@@ -42,7 +42,7 @@ app.patch("/:id",async (req,res,next)=>{
     try{
         const data = req.body
         const result = await BookingsModel.ModBooking(data)
-        return res.json(result)
+        return res.send("ok")
     }catch(err){
         return next(err)
     }
@@ -52,8 +52,8 @@ app.delete("/",async (req,res,next)=>{
     try{
         const data = req.body
         console.log(data)
-        const result: any = await BookingsModel.RemoveBooking(data)
-        return res.json(result)
+        const result = await BookingsModel.RemoveBooking(data)
+        return res.send("ok")
     }catch(err){
         return next(err)
     }

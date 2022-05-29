@@ -74,8 +74,8 @@ export const GetBookingById = async (data: any) : Promise<any> =>{
       res: { dir: oracledb.BIND_OUT, type: "GESTIONHOTEL.BOOKING_OBJ" },
       id: {val: data.id}
     };
-    const result = await execute(STATEMENT, binds,{outFormat: oracledb.OUT_FORMAT_OBJECT});
-    return result.outBinds.res;
+    const result : oracledb.Result<any> = await execute(STATEMENT, binds);
+    return JSON.stringify(result.outBinds.res);
 };  
 
 export const AddBooking = async (data : any)=>{
@@ -91,7 +91,6 @@ export const AddBooking = async (data : any)=>{
     rm: {val :data.ROOMS_TO_REMOVE,type: "GESTIONHOTEL.SET_REMOVED_ARR"}
   };
   const result = await execute(STATEMENT, binds,{outFormat: oracledb.OUT_FORMAT_OBJECT,autoCommit:true});
-  return result
 }
 
 
@@ -125,7 +124,6 @@ export const ModBooking = async (data : any)=>{
   };
 
   const result = await execute(STATEMENT, binds,{outFormat: oracledb.OUT_FORMAT_OBJECT,autoCommit:true});
-  return result
 }
 
 const getBookingObjectData =  (data: any) => {
