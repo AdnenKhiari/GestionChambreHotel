@@ -21,7 +21,6 @@ const ModComponent = ()=>{
             }).map((client: any)=>  Object.values(client))
             roomData.CLIENTS = new_clients
         })
-        console.log(dt)
         dt.NAME = dt.BOOKING_NAME
         return dt
     }

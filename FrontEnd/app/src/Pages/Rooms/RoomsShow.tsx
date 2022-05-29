@@ -33,8 +33,6 @@ const ShowComponent = ()=>{
         return <h1 className="danger-color">Error !</h1>
     if(isLoading)
         return <LoadingCercle/>
-    else
-//        console.log(rdata)
 
 return <motion.div className="page" variants={StaggerChildren(0.3,0)} initial="initial" exit="exit" animate="animate">
         <motion.div  className="page-header" variants={Slide}>

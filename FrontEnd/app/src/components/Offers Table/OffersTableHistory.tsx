@@ -34,10 +34,10 @@ const datatable  = (body: any) : IUniversalTable.ItableData => ({
 })
 const schema = joi.object({
     pagenum: joi.number().min(0).default(0).optional().label("Page Number"),
-    bookingId : joi.number().allow("").positive().optional(),
-    room_number : joi.number().allow("").positive().optional(),
-    checkIn: joi.date().allow("").optional(),
-    checkOut: joi.date().allow("").optional(),
+    bookingId : joi.number().allow("").positive().optional().label("Booking ID"),
+    room_number : joi.number().allow("").positive().optional().label("Room Number"),
+    checkIn: joi.date().allow("").optional().label("Checkin"),
+    checkOut: joi.date().allow("").optional().label("Checkout"),
 })
 
 const OffersTableHistory = ()=>{

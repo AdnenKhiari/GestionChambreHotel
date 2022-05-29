@@ -44,7 +44,6 @@ export const GetBookingInfo = async (data: any) =>{
     }
 
     STATEMENT += `\n OFFSET :pagenum * :pagelim ROWS FETCH FIRST :pagelim ROWS ONLY`;
-    //     console.log(STATEMENT)
     const searchCount: oracledb.Result<any> = await execute(
       "SELECT COUNT(id) FROM CLIENTS"
     );

@@ -1,7 +1,6 @@
 import moment from "moment"
 
 export const getRoomCapacity  :(type : 'S' | 'D' | 'T' | 'Q'  ) => string  | undefined = (type)=> {
-    console.log(type)
     if(type === 'S')
         return 'Single'
     if(type === 'D')

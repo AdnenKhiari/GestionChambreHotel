@@ -27,7 +27,6 @@ const TableSearch : React.FC<ISearchParams> = ({searchData,schema ,onValidate,pa
     },[])
 
     return <form  className="tableSearch" onReset={reset} onSubmit={handleSubmit((data)=>{
-        console.log(data)
         onValidate(data)
     })}>
         {searchData.map((sd,index)=>{

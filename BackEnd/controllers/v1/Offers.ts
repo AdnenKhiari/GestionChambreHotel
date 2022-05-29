@@ -1,14 +1,16 @@
 import express from "express"
 import * as OffersModel from "../../models/Offers"
+import * as OffersValidation from "../../lib/ValidateInputs/Offers"
+
 const app = express.Router()
 
 app.get("/",(req,res)=>{
     return res.send("hi from client")
 })
 
-app.get("/info",async (req,res,next)=>{
+app.get("/info",OffersValidation.ValidateGetInfo,async (req,res,next)=>{
     try{
-        const data = req.query
+        const data = req.data
         const result  = await OffersModel.GetOffersInfo(data)
         return res.json(result)
     }catch(err){
@@ -16,30 +18,27 @@ app.get("/info",async (req,res,next)=>{
     }
 })
 
-app.get("/:id",async (req,res,next)=>{
+app.get("/:id",OffersValidation.ValidateGetById,async (req,res,next)=>{
     try{
-        const data = req.params
+        const data = req.data
         const result : Offer | undefined = await OffersModel.GetOfferById(data)
         return res.json(result)
     }catch(err){
         return next(err)
     }
 })
-app.get("/:id/history",async (req,res,next)=>{
+app.get("/:id/history",OffersValidation.ValidateGetHistory,async (req,res,next)=>{
     try{
-        const data : any = req.query
-        data.id = req.params.id
-        console.log(data)
+        const data : any = req.data
         const result  = await OffersModel.GetOffersHistory(data)
         return res.json(result)
     }catch(err){
         return next(err)
     }
 })
-app.post("/",async (req,res,next)=>{
+app.post("/",OffersValidation.ValidateInsert,async (req,res,next)=>{
     try{
         const data = req.body
-        console.log(data)
 
         const result = await OffersModel.AddOffer(data)
         return res.json(result)
@@ -48,7 +47,7 @@ app.post("/",async (req,res,next)=>{
     }
 })
 
-app.patch("/:id",async (req,res,next)=>{
+app.patch("/:id",OffersValidation.ValidateUpdate,async (req,res,next)=>{
     try{
         
         const {id} = req.params
@@ -62,10 +61,9 @@ app.patch("/:id",async (req,res,next)=>{
     }
 })
 
-app.delete("/",async (req,res,next)=>{
+app.delete("/",OffersValidation.ValidateDelete,async (req,res,next)=>{
     try{
         const data = req.body
-        console.log(data)
         const result = await OffersModel.RemoveOffer(data)
         return res.json(result)
     }catch(err){

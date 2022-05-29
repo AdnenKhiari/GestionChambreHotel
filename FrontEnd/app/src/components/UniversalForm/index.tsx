@@ -22,7 +22,6 @@ const UniversalForm : React.FC<UniFormType> = ({schema,formData,mutate,initData,
       });
       const validate  = handleSubmit((data)=>{
             mutate(data)
-            console.log(data)
         })
       return <UniversalFormUi hideSubmit={hideSubmit} initData={initData} reset={reset} register={register} handleSubmit={validate} setValue={setValue} formData={formData}  errors={errors} />
 }

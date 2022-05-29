@@ -8,9 +8,9 @@ const schema = joi.object({
     address: joi.string().required().label("Address"),
     date_of_birth: joi.date().required().label("Birth Date"),
     cin: joi.string().required().label("CIN"),
-    job: joi.string().allow("",null).empty("").default(null).label("Job"),
-    gender: joi.allow("F","M").required().label("Gender"),
-    state: joi.allow("S","D","M").required().label("State"),
+    job: joi.string().allow("",null).empty("").optional().default(null).label("Job"),
+    gender: joi.valid("F","M").required().label("Gender"),
+    state: joi.valid("S","D","M").required().label("State"),
 })
 
 const formData : IUniversalForm.IformData[] = [

@@ -45,11 +45,11 @@ const formData  : IUniversalForm.IformData[] = [
 ]
 
 const schema = joi.object({
-    room_number: joi.number().allow("").required().label("Room Number"),
-    capacity: joi.allow("S","D","T","Q","").required().label("Room Capacity"),
-    type: joi.allow("R","S","").required().label("Room Type"),
-    options: joi.allow("D","P","S","").required().label("Room Options"),
-    state: joi.allow("F","O","M","C","").required().label("Room State"),
+    room_number: joi.number().positive().required().label("Room Number"),
+    capacity: joi.valid("S","D","T","Q").required().label("Room Capacity"),
+    type: joi.valid("R","S").required().label("Room Type"),
+    options: joi.valid("D","P","S").required().label("Room Options"),
+    state: joi.valid("F","O","M","C").required().label("Room State"),
 })
 
 const RoomsModAddModel : React.FC<{mutate : (dt: any) => void,initData? : roomData}> = ({mutate,initData} )=>{

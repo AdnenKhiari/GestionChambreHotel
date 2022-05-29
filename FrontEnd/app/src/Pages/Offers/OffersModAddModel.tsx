@@ -34,10 +34,10 @@ const formData  : IUniversalForm.IformData[] = [
 
 const schema = joi.object({
     date_start: joi.date().required().label("Start Date"),
-    date_end: joi.date().allow("",null).empty("").default(null).label("End Date"),
-    price : joi.number().positive().label("Price"),
-    name : joi.string().label("Name"),
-    description : joi.string().label("Description")
+    date_end: joi.date().allow("",null).empty("").default(null).optional().label("End Date"),
+    price : joi.number().positive().required().label("Price"),
+    name : joi.string().required().label("Name"),
+    description : joi.string().required().label("Description")
 })
 
 const ClientsModAddModel = ({mutate,initData} : {mutate : any,initData? : offerData})=>{

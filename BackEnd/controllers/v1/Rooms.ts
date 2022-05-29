@@ -1,14 +1,13 @@
 import express from "express"
 import * as RoomsModel from "../../models/Rooms"
 const app = express.Router()
-
+import * as RoomsValidation from "../../lib/ValidateInputs/Rooms"
 app.get("/",(req,res)=>{
     return res.send("hi from rooms")
 })
-app.get("/info",async (req,res,next)=>{
+app.get("/info",RoomsValidation.ValidateGetInfo,async (req,res,next)=>{
     try{
-        const data = req.query
-        console.log(data)
+        const data = req.data
         const result  = await RoomsModel.GetRoomsInfo(data)
         return res.json(result)
     }catch(err){
@@ -16,9 +15,9 @@ app.get("/info",async (req,res,next)=>{
     }
 })
 
-app.get("/:id",async (req,res,next)=>{
+app.get("/:id",RoomsValidation.ValidateGetById,async (req,res,next)=>{
     try{
-        const data = req.params
+        const data = req.data
         const result  = await RoomsModel.GetRoomById(data)
         return res.json(result)
     }catch(err){
@@ -26,9 +25,9 @@ app.get("/:id",async (req,res,next)=>{
     }
 })
 
-app.post("/",async (req,res,next)=>{
+app.post("/",RoomsValidation.ValidateInsert,async (req,res,next)=>{
     try{
-        const data = req.body
+        const data = req.data
         const result = await RoomsModel.AddRoom(data)
         return res.json(result)
     }catch(err){
@@ -36,14 +35,9 @@ app.post("/",async (req,res,next)=>{
     }
 })
 
-app.patch("/:id",async (req,res,next)=>{
+app.patch("/:id",RoomsValidation.ValidateUpdate,async (req,res,next)=>{
     try{
-        
-        const {id} = req.params
-        const data = req.body
-        data["id"] = id
-        console.log(data)
-
+        const data = req.data
         const result = await RoomsModel.UpdateRoom(data)
         return res.json(result)
     }catch(err){
@@ -51,11 +45,9 @@ app.patch("/:id",async (req,res,next)=>{
     }
 })
 
-app.get("/:id/history",async (req,res,next)=>{
+app.get("/:id/history",RoomsValidation.ValidateGetHistory,async (req,res,next)=>{
     try{
-        const data : any = req.query
-        data.id = req.params.id
-        console.log("H",data)
+        const data = req.data
         const result  = await RoomsModel.GetRoomsHistory(data)
         return res.json(result)
     }catch(err){
@@ -63,10 +55,9 @@ app.get("/:id/history",async (req,res,next)=>{
     }
 })
 
-app.delete("/",async (req,res,next)=>{
+app.delete("/",RoomsValidation.ValidateDelete,async (req,res,next)=>{
     try{
-        const data = req.body
-        console.log(data)
+        const data = req.data
         const result = await RoomsModel.RemoveRoom(data)
         return res.json(result)
     }catch(err){

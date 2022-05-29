@@ -92,10 +92,6 @@ export const GetRoomsHistory = async (data : any) =>{
     }
 
     STATEMENT += `\n OFFSET (:pagenum * :pagelim) ROWS FETCH FIRST :pagelim ROWS ONLY`
-    console.log(STATEMENT)
-//     console.log(STATEMENT)
-
-
 
     const result = await execute(STATEMENT,binds);
         //format the date:

@@ -34,11 +34,11 @@ const datatable  = (body: any) : IUniversalTable.ItableData => ({
 })
 const schema = joi.object({
     pagenum: joi.number().min(0).default(0).optional().label("Page Number"),
-    bookingId : joi.number().allow("").positive().optional(),
-    roomId : joi.number().allow("").positive().optional(),
-    checkIn: joi.date().allow("").optional(),
-    checkOut: joi.date().allow("").optional(),
-    gender: joi.optional()
+    bookingId : joi.number().allow("").positive().optional().label("Booking Id"),
+    roomId : joi.number().allow("").positive().optional().label("Room Id"),
+    checkIn: joi.date().allow("").optional().label("Check In"),
+    checkOut: joi.date().allow("").optional().label("Check Out"),
+    gender: joi.optional().valid("M","F","").label("Gender")
 })
 
 const ClientsTableHistory = ()=>{

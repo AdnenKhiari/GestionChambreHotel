@@ -49,11 +49,11 @@ const datatable  = (body: any) : IUniversalTable.ItableData => ({
 
 const schema = joi.object({
     id : joi.number().allow("").positive(),
-    room_number: joi.number().allow("").required().label("Room Number"),
-    capacity: joi.allow("S","D","T","Q","").required().label("Room Capacity"),
-    type: joi.allow("R","S","").required().label("Room Type"),
-    options: joi.allow("D","P","S","").required().label("Room Options"),
-    state: joi.allow("F","O","M","C","").required().label("Room State"),
+    room_number: joi.number().positive().allow("").required().label("Room Number"),
+    capacity: joi.valid("S","D","T","Q","").required().label("Room Capacity"),
+    type: joi.valid("R","S","").required().label("Room Type"),
+    options: joi.valid("D","P","S","").required().label("Room Options"),
+    state: joi.valid("F","O","M","C","").required().label("Room State"),
     pagenum: joi.number().min(0).default(0).optional().label("Page Number")
 
 })

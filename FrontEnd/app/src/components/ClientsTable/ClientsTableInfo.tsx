@@ -39,11 +39,11 @@ const datatable  = (body: any) : IUniversalTable.ItableData => ({
 })
 
 const schema = joi.object({
-    id : joi.number().allow("").positive(),
-    fullname: joi.string().allow("").required().label("Full Name"),
-    date_of_birth: joi.date().allow("").required().label("Birth Date"),
-    cin: joi.string().allow("").required().label("CIN"),
-    gender: joi.allow("F","M").allow("").required().label("Gender"),
+    id : joi.number().allow("").optional().positive(),
+    fullname: joi.string().allow("").optional().label("Full Name"),
+    date_of_birth: joi.date().allow("").optional().label("Birth Date"),
+    cin: joi.string().allow("").optional().label("CIN"),
+    gender: joi.valid("F","M","").optional().label("Gender"),
     pagenum: joi.number().min(0).default(0).optional().label("Page Number")
 })
 

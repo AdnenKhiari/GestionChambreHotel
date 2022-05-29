@@ -9,7 +9,6 @@ app.get("/",(req,res)=>{
 app.get("/info",async (req,res,next)=>{
     try{
         const data = req.query
-        console.log(data)
         const result  = await BookingsModel.GetBookingInfo(data)
         return res.json(result)
     }catch(err){
@@ -51,7 +50,6 @@ app.patch("/:id",async (req,res,next)=>{
 app.delete("/",async (req,res,next)=>{
     try{
         const data = req.body
-        console.log(data)
         const result = await BookingsModel.RemoveBooking(data)
         return res.send("ok")
     }catch(err){

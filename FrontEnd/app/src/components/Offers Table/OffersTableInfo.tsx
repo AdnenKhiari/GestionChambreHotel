@@ -22,7 +22,8 @@ const searchInputs  :  IUniversalTable.IsearchData[] = [
     {
         name:"date_end",
         label: "End Date",
-        type: "date"
+        type: "date",
+        nullable: true
 
     },
     {
@@ -39,10 +40,10 @@ const datatable  = (body: any) : IUniversalTable.ItableData => ({
 
 const schema = joi.object({
     id : joi.number().allow("").positive(),
-    date_start: joi.date().allow("").required().label("Start Date"),
-    date_end: joi.date().allow("").required().label("End Date"),
-    price : joi.number().positive().allow("").label("Price"),
-    name : joi.string().allow("").label("Name"),
+    date_start: joi.date().allow("").optional().label("Start Date"),
+    date_end: joi.date().allow("",null).optional().label("End Date"),
+    price : joi.number().positive().allow("").optional().label("Price"),
+    name : joi.string().allow("").optional().label("Name"),
     pagenum: joi.number().min(0).default(0).optional().label("Page Number")
 })
 

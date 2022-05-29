@@ -18,7 +18,6 @@ function App() {
   
   const {payload : udata,isLoading,isError,refetch} = useGetQuery(["get-connected-user"],APIROUTES.USERS.GETLOGGED,
   (data: any)=>{
-    console.log(data)
     setUserInfo(data)
   },
   (err: any)=>{

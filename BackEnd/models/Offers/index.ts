@@ -36,9 +36,9 @@ export const GetOffersInfo = async (data : OfferSearch) : Promise<PaginatedArr> 
                 filters.push("TO_CHAR(date_start,'DD/MM/YYYY')=:date_start")
                 binds["date_start"]={val:dt ,type: oracledb.STRING}
             }
-            if(data.date_end !== null){
+            if(data.date_end !== undefined){
                 if(data.date_end === null){
-                    binds["date_end"] = {val: null}
+                    filters.push("date_end IS NULL")
                 }else if(data.date_end != ''){
                     const dt = formate_date(data.date_end as string)
                     filters.push("TO_CHAR(date_end,'DD/MM/YYYY')=:date_end")
@@ -126,10 +126,6 @@ export const GetOffersHistory = async ( data: any) : Promise<PaginatedArr> => {
     }
 
     STATEMENT += `\n OFFSET (:pagenum * :pagelim) ROWS FETCH FIRST :pagelim ROWS ONLY`
-    console.log(STATEMENT)
-//     console.log(STATEMENT)
-
-
 
     const result = await execute(STATEMENT,binds);
         //format the date:
