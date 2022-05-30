@@ -13,7 +13,7 @@ const BookingCardContainer : React.FC<{initData:any,mutate: (dt: any) => void}> 
 
     const [compstate,setComState] = useState<RoomBookingType>('R')
     const [selectedIndexRoom,setSelectedIndexRoom] = useState(-1)
-    const { handleSubmit} = useFormContext()
+    const { handleSubmit,formState : {errors}} = useFormContext()
 
     const { fields, append, remove } = useFieldArray({
       name: "ROOMS", // unique name for your Field Array
@@ -26,7 +26,7 @@ const BookingCardContainer : React.FC<{initData:any,mutate: (dt: any) => void}> 
             const data_to_send = {
                 ROOMS_TO_REMOVE:rooms_to_remove,
                 BOOKING_DATA: {
-                    NAME : booking_data.NAME,
+                    BOOKING_NAME : booking_data.BOOKING_NAME,
                     DATE_CHECKIN: booking_data.DATE_CHECKIN,
                     DATE_CHECKOUT: booking_data.DATE_CHECKOUT,
                     BOOKING_ID: booking_data.BOOKING_ID,
@@ -53,7 +53,6 @@ const BookingCardContainer : React.FC<{initData:any,mutate: (dt: any) => void}> 
             mutate(data_to_send)
         })()
     }
-
    return <>
    <div className="rooms-bookings-header">
          <h1>Rooms</h1>

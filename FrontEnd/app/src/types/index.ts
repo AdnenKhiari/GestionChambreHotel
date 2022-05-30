@@ -111,7 +111,7 @@ export interface bkroomData {
 }
 export  interface bookingsData  {
     ID?: number,
-    NAME: string,
+    BOOKING_NAME: string,
     DATE_CHECKIN: string,
     DATE_CHECKOUT: string,
     ROOMS : roomData[]

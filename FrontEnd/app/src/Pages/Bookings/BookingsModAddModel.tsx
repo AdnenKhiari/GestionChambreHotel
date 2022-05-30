@@ -9,7 +9,7 @@ import {  IUniversalTable } from "../../types";
 
 const formData  : IUniversalTable.IsearchData[] = [
     {
-        name:"NAME",
+        name:"BOOKING_NAME",
         label: "Name",
         type: "text"
     },    
@@ -39,7 +39,7 @@ const room_schema = Joi.object({
     CLIENTS : Joi.array().min(1).label("Clients")
 })
 const schema = Joi.object({
-    NAME: Joi.string().required().label("Name"),
+    BOOKING_NAME: Joi.string().required().label("Booking Name"),
     BOOKING_ID: Joi.optional().label("Booking Id"),
     DATE_CHECKIN: Joi.date().required().label("Check In"),
     DATE_CHECKOUT: Joi.date().required().label("Check Out"),

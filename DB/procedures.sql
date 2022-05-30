@@ -16,7 +16,7 @@ TYPE set_r_arr IS TABLE OF set_room_obj INDEX BY BINARY_INTEGER;
 
 TYPE set_booking_obj IS RECORD(
     booking_id bookings.id%TYPE,
-    name bookings.name%TYPE,
+    booking_name bookings.name%TYPE,
     date_checkin bookings.date_checkin%TYPE,
     date_checkout bookings.date_checkout%TYPE,
     rooms set_r_arr
@@ -45,8 +45,8 @@ TYPE r_array IS TABLE OF r_obj INDEX BY BINARY_INTEGER;
 TYPE booking_obj IS RECORD (
     booking_id bookings.id%TYPE,
     booking_name bookings.name%TYPE,
-    date_checkin bookings.date_checkin%TYPE,
-    date_checkout bookings.date_checkout%TYPE,
+    date_checkin VARCHAR2(15),
+    date_checkout VARCHAR2(15),
     rooms r_array
 );
 
@@ -110,7 +110,7 @@ BEGIN
 
    IF bk.booking_id = -1 THEN
    
-       INSERT INTO BOOKINGS VALUES (null,bk.name,bk.date_checkin,bk.date_checkout)
+       INSERT INTO BOOKINGS VALUES (null,bk.booking_name,bk.date_checkin,bk.date_checkout)
        RETURNING id INTO bk_id;
        
         -- for error
@@ -123,7 +123,7 @@ BEGIN
     ELSE
     
        UPDATE BOOKINGS SET 
-       name = bk.name,
+       name = bk.booking_name,
        date_checkin = bk.date_checkin,
        date_checkout=bk.date_checkout
        
@@ -239,7 +239,7 @@ current_bk booking_obj;
 
 BEGIN
 
-SELECT b.id,b.name,b.date_checkin,b.date_checkout INTO current_bk.booking_id,current_bk.booking_name,current_bk.date_checkin,current_bk.date_checkout
+SELECT b.id,b.name,TO_CHAR(b.date_checkin,'YYYY-MM-DD'),TO_CHAR(b.date_checkout,'YYYY-MM-DD') INTO current_bk.booking_id,current_bk.booking_name,current_bk.date_checkin,current_bk.date_checkout
 FROM BOOKINGS b
 WHERE b.id = xid;
 OPEN rooms_data(current_bk.booking_id);
