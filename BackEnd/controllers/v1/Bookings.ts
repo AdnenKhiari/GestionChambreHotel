@@ -1,14 +1,16 @@
 import express from "express"
 import * as BookingsModel from "../../models/Bookings"
+import * as BookingsValidation from "../../lib/ValidateInputs/Bookings"
+
 const app = express.Router()
 
 app.get("/",(req,res)=>{
     return res.send("hi from Bookings")
 })
 
-app.get("/info",async (req,res,next)=>{
+app.get("/info",BookingsValidation.ValidateGetInfo,async (req,res,next)=>{
     try{
-        const data = req.query
+        const data = req.data
         const result  = await BookingsModel.GetBookingInfo(data)
         return res.json(result)
     }catch(err){
@@ -16,9 +18,9 @@ app.get("/info",async (req,res,next)=>{
     }
 })
 
-app.get("/:id",async (req,res,next)=>{
+app.get("/:id",BookingsValidation.ValidateGetById,async (req,res,next)=>{
     try{
-        const data = req.params
+        const data : any= req.data
         const result = await BookingsModel.GetBookingById(data)
         return res.send(result)
     }catch(err){
@@ -26,9 +28,9 @@ app.get("/:id",async (req,res,next)=>{
     }
 })
 
-app.post("/",async (req,res,next)=>{
+app.post("/",BookingsValidation.ValidateInsert,async (req,res,next)=>{
     try{
-        const data = req.body
+        const data = req.data
         const result = await BookingsModel.AddBooking(data)
         return res.send("ok")
     }catch(err){
@@ -36,10 +38,10 @@ app.post("/",async (req,res,next)=>{
     }
 })
 
-app.patch("/:id",async (req,res,next)=>{
+app.patch("/:id",BookingsValidation.ValidateUpdate,async (req,res,next)=>{
     //the id is kinda uselss cause it's already in the booking id ( body) xD
     try{
-        const data = req.body
+        const data = req.data
         const result = await BookingsModel.ModBooking(data)
         return res.send("ok")
     }catch(err){
@@ -47,9 +49,9 @@ app.patch("/:id",async (req,res,next)=>{
     }
 })
 
-app.delete("/",async (req,res,next)=>{
+app.delete("/",BookingsValidation.ValidateDelete,async (req,res,next)=>{
     try{
-        const data = req.body
+        const data = req.data
         const result = await BookingsModel.RemoveBooking(data)
         return res.send("ok")
     }catch(err){

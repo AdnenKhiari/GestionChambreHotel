@@ -31,10 +31,10 @@ const datatable  = (body: any) : IUniversalTable.ItableData => ({
     body: body
 })
 const schema = joi.object({
-    id : joi.number().allow("").positive(),
-    name: joi.string().allow("").required().label("Name"),
-    date_checkin: joi.date().allow("").required().label("Check In"),
-    date_checkout: joi.date().allow("").required().label("Check Out"),
+    id : joi.number().allow("").optional().positive(),
+    name: joi.string().allow("").optional().label("Name"),
+    date_checkin: joi.date().allow("").optional().label("Check In"),
+    date_checkout: joi.date().allow("").optional().label("Check Out"),
     pagenum: joi.number().min(0).default(0).optional().label("Page Number")
 })
 

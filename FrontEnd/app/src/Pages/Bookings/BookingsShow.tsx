@@ -35,12 +35,13 @@ const ShowComponent = ()=>{
 return <motion.div className="page" variants={StaggerChildren(0.3,0)} initial="initial" exit="exit" animate="animate">
         <motion.div className="page-header" variants={Slide}>
             <div className="section-1">
-                <h1>Booking:<span>#{bdata.BOOKING_ID}</span> </h1>
+                <h1>Name:<span>{bdata.BOOKING_NAME}</span> </h1>
+                <h2>Booking:<span>#{bdata.BOOKING_ID}</span> </h2>
                 <div className={"labelitem " + (new Date(bdata.DATE_CHECKOUT) > new Date() ? "success" : "danger") }>{new Date(bdata.DATE_CHECKOUT) > new Date() ? "ACTIVE" : "OFF"}</div>
             </div>            
             <div className="section-2">
-                <p>Check IN:<span>{ format_date(bdata.DATE_CHECKIN)}</span>  </p>
-                <p>Check OUT:<span>{format_date(bdata.DATE_CHECKOUT)}</span></p>
+                <p>Check In:<span>{ format_date(bdata.DATE_CHECKIN)}</span>  </p>
+                <p>Check Out:<span>{format_date(bdata.DATE_CHECKOUT)}</span></p>
             </div>
         </motion.div>
         <div >
