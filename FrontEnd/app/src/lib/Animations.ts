@@ -34,6 +34,18 @@ export const FadeInScale : Variants = {
         speed: "1s"
     }
 }
+export const FadeOut : Variants = {
+    initial : {
+        opacity: 0,
+    },
+    animate : {
+        opacity: 1,
+    },
+    exit: {
+        opacity: 0,
+    }
+}
+
 export const FadeInTrans : Variants = {
     initial : {
         x: -50,

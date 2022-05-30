@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Menu from "./components/Menu"
 import Footer from "./components/Footer"
-import { Routes ,Route} from 'react-router-dom';
+import { Routes ,Route, useLocation} from 'react-router-dom';
 import Heading from './components/Heading';
 import ROUTES from "./constants/Routes"
 import APIROUTES from "./constants/ApiRoutes"
@@ -13,9 +13,10 @@ import { useGetQuery } from './lib/Queries/useGetQuery';
 import Login from './Pages/Users/Login';
 import { UserContext } from './lib/context';
 import { LoadingCercle } from './components/LoadingCercle';
+import { AnimatePresence } from 'framer-motion';
 function App() {  
   const [userInfo,setUserInfo] = useState(null)
-  
+  const location = useLocation()
   const {payload : udata,isLoading,isError,refetch} = useGetQuery(["get-connected-user"],APIROUTES.USERS.GETLOGGED,
   (data: any)=>{
     setUserInfo(data)
@@ -28,7 +29,7 @@ function App() {
     return  <LoadingCercle/>
 
   if(!userInfo || isError)
-    return <Login />
+    return <Login key={1452} />
 
   return (
     <div className="App">
@@ -40,7 +41,8 @@ function App() {
                 <UserContext.Provider value={{userInfo,setUserInfo}}>
                 <Heading /> 
                 <div className="main-content">
-                <Routes >
+                
+                <Routes location={location} key={location.pathname} >
                   <Route path={ROUTES.CLIENTS.SHOW+"*"} element={<ClientsPages.ClientsShow />} />
                   <Route path={ROUTES.CLIENTS.ADD+"*"} element={<ClientsPages.ClientsAdd />} />
                   <Route path={ROUTES.CLIENTS.MOD+"*"} element={<ClientsPages.ClientMod />} />

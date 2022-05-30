@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../../lib/context";
+import { AnimatePresence, motion } from "framer-motion";
+import { FadeOut } from "../../lib/Animations";
 
 const schema = Joi.object({
     email: Joi.string().required().label("Email"),
@@ -40,7 +42,8 @@ const Login = ()=>{
         return <Navigate to={ROUTES.BOOKING.SHOW} />
     }
 
-    return <div className="loginpage"><form onSubmit={handleSubmit((data)=>{
+    return <motion.div className="loginpage" variants={FadeOut} animate="animate" initial="initial" exit="exit">
+    <form onSubmit={handleSubmit((data)=>{
         mutate(data)
     })} 
     
@@ -62,7 +65,7 @@ const Login = ()=>{
 
         <p>{loginError}</p>
     </form>
-    </div> 
+    </motion.div> 
 }
 
 export default Login

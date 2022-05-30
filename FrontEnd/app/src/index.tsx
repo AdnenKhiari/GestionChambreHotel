@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import {QueryClientProvider,QueryClient} from "react-query"
+import { AnimatePresence } from 'framer-motion';
 const client = new QueryClient()
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,7 +19,9 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={client}>
       <BrowserRouter >
+      <AnimatePresence exitBeforeEnter initial={true}>
         <App />
+      </AnimatePresence>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
