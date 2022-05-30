@@ -2,7 +2,7 @@ import * as datefns from "date-fns";
 import oracledb, { BIND_OUT } from "oracledb";
 import { resolve } from "path";
 import { execute, getClassInDb } from "../../lib/QueryExecutor";
-import { formate_date } from "../../lib/utils";
+import { formate_date, formate_date_mod } from "../../lib/utils";
 import {StatusCodes} from "http-status-codes"
 const pagelim = 8;
 
@@ -74,7 +74,9 @@ export const GetBookingById = async (data: any) : Promise<any> =>{
       id: {val: data.id}
     };
     const result : oracledb.Result<any> = await execute(STATEMENT, binds);
-    return JSON.stringify(result.outBinds.res);
+    const cl = result.outBinds.res
+    
+    return JSON.stringify(cl);
 };  
 
 export const AddBooking = async (data : any)=>{

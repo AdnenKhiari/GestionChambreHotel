@@ -7,8 +7,6 @@ import { FormProvider, useFieldArray, useForm, useFormContext } from "react-hook
 import { joiResolver } from "@hookform/resolvers/joi";
 import {  IUniversalTable } from "../../types";
 
-
-
 const formData  : IUniversalTable.IsearchData[] = [
     {
         name:"NAME",
@@ -31,18 +29,18 @@ const room_schema = Joi.object({
     ROOM_ID: Joi.number().required().label("Room"),
     OFFER_ID: Joi.number().required().label("Offer"),
     ALLOCATED_ROOM_ID: Joi.number().optional(),
-    ROOM_TYPE: Joi.optional(),
-    ROOM_CAPACITY: Joi.optional(),
-    ROOM_NUMBER: Joi.optional(),
-    ROOM_OPTION: Joi.optional(),
-    OFFER_NAME: Joi.optional(),
-    OFFER_PRICE: Joi.optional(),
-    FOOD_CHOICE: Joi.allow('H','N','F','SI','AI').required().label("Food Choice"),
+    ROOM_TYPE: Joi.required().label("Room Type"),
+    ROOM_CAPACITY: Joi.required().label("Room Capacity"),
+    ROOM_NUMBER: Joi.required().label("Room Number"),
+    ROOM_OPTION: Joi.required().label("Room Option"),
+    OFFER_NAME: Joi.required().label("Offer Name"),
+    OFFER_PRICE: Joi.required().label("Offer Price"),
+    FOOD_CHOICE: Joi.valid('H','N','F','SI','AI').required().label("Food Choice"),
     CLIENTS : Joi.array().min(1).label("Clients")
 })
 const schema = Joi.object({
     NAME: Joi.string().required().label("Name"),
-    BOOKING_ID: Joi.optional(),
+    BOOKING_ID: Joi.optional().label("Booking Id"),
     DATE_CHECKIN: Joi.date().required().label("Check In"),
     DATE_CHECKOUT: Joi.date().required().label("Check Out"),
     ROOMS: Joi.array().items(room_schema).label("Rooms")
@@ -52,7 +50,7 @@ const BookingsModAddModel = ({mutate,initData = {}} : {mutate : any,initData? : 
 
     //for the main form
     const methods = useForm({
-        shouldUnregister: true,
+        shouldUnregister: false,
         shouldFocusError: true,
         resolver: joiResolver(schema),
         defaultValues : initData

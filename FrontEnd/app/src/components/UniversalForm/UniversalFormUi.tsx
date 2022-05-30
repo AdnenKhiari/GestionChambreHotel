@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetError, UseFormSetValue } from "react-hook-form";
 import Select from "react-select";
 import { IUniversalForm } from "../../types";
@@ -21,7 +22,8 @@ const UniversalFormUi : React.FC<IUniFormUi>= ({register,errors,formData,initDat
             res=sd.selectOptions?.find((item : any)=> item.value === initData[sd.name]) 
         else
             res=sd.selectOptions?.at(0)
-        setValue(sd.name,res.value)
+            setValue(sd.name,res.value)
+
         return res
     }
 
@@ -29,7 +31,7 @@ const UniversalFormUi : React.FC<IUniFormUi>= ({register,errors,formData,initDat
     <form onReset={reset} onSubmit={handleSubmit} >
         <div className="input-container">
         {formData.map((sd : any,index : number)=>(
-            <div className="form-item">
+            <div className="form-item" key={index+120}>
             <label htmlFor={sd.name}>{sd.label}</label>
             {sd.type === "select" ? (
             <>

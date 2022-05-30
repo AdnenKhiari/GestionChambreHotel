@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import  oracledb from 'oracledb';
 import ApiError from '../../Errors/ApiError';
 import { execute } from "../../lib/QueryExecutor"
-import { formate_date } from '../../lib/utils';
+import { formate_date, formate_date_mod } from '../../lib/utils';
 
 const pagelim = 8
 export const GetOffersInfo = async (data : OfferSearch) : Promise<PaginatedArr> => {
@@ -83,7 +83,12 @@ export const GetOfferById = async ( data: {id: number | string}) : Promise<Offer
     if(result.rows?.length === 0){
         throw new ApiError(`Invalid Offer ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
     }
-    return result.rows?.at(0)
+    const cl = result.rows?.at(0) as Offer
+    
+    cl["date_start"] = formate_date_mod(cl["date_start"] as string)
+    if(cl["date_end"])
+    cl["date_end"] = formate_date_mod(cl["date_end"] as string)
+    return cl
 }
 
 export const GetOffersHistory = async ( data: any) : Promise<PaginatedArr> => {

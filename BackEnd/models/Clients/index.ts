@@ -1,7 +1,7 @@
 import OracleDB, { maxRows } from 'oracledb';
 import  oracledb from 'oracledb';
 import { execute } from "../../lib/QueryExecutor"
-import { formate_date } from '../../lib/utils';
+import { formate_date, formate_date_mod } from '../../lib/utils';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from "../../Errors/ApiError"
 const pagelim = 8
@@ -72,7 +72,10 @@ export const GetClientById = async ( data: {id: number | string}) : Promise<Clie
     if(result.rows?.length === 0){
         throw new ApiError(`Invalid Client ID ${data.id}`,null,StatusCodes.BAD_REQUEST)
     }
-    return result.rows?.at(0) 
+    const cl = result.rows?.at(0) as Client
+    
+    cl["date_of_birth"] = formate_date_mod(cl["date_of_birth"] as string)
+    return cl
 }
 
 export const GetClientHistory = async (data : any ) : Promise<PaginatedArr> => {
