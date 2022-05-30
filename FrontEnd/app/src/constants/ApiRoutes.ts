@@ -1,4 +1,4 @@
-const basePath = "http://localhost:4000/api";
+const basePath = process.env.NODE_ENV === "production" ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL
 const Routes = {
     USERS : {
         LOGOUT: basePath+'/auth/logout',

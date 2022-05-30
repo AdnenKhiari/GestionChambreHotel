@@ -51,12 +51,12 @@ const Login = ()=>{
         <h1>Login</h1>
         <div className="login-form-item">
             <label htmlFor="email">Email</label>
-            <input type="email" {...register("email")} />
+            <input id="email" type="email" {...register("email")} />
             {errors && <p className="danger-text"> {errors["email"]?.message.replace('"','')}</p>}
         </div>
         <div className="login-form-item">
             <label htmlFor="password">Password</label>
-            <input type="password" {...register("password")} />
+            <input id="password" type="password" {...register("password")} />
             {errors && <p className="danger-text"> {errors["password"]?.message.replace('"','')}</p>}
         </div>
 
