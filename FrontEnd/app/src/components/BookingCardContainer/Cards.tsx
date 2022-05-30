@@ -25,6 +25,8 @@ export const CardItem = ({index} : {index:number} )=>{
                 const clients : any[] = watch(`ROOMS.${index}.CLIENTS`)
                 let client_id_index = clients.findIndex(dt => dt[0] === row[0])
                 clients.splice(client_id_index,1)
+               // clients.splice(client_id_index,1)
+
                 setValue(`ROOMS.${index}.CLIENTS` as const,clients)
             }} 
             tableData={datatable(watch(`ROOMS.${index}.CLIENTS` as const))}/>

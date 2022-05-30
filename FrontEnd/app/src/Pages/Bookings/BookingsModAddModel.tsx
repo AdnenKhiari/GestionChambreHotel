@@ -28,7 +28,7 @@ const formData  : IUniversalTable.IsearchData[] = [
 const room_schema = Joi.object({
     ROOM_ID: Joi.number().required().label("Room"),
     OFFER_ID: Joi.number().required().label("Offer"),
-    ALLOCATED_ROOM_ID: Joi.number().optional(),
+    ALLOCATED_ROOM_ID: Joi.number().optional().default(-1),
     ROOM_TYPE: Joi.required().label("Room Type"),
     ROOM_CAPACITY: Joi.required().label("Room Capacity"),
     ROOM_NUMBER: Joi.required().label("Room Number"),
@@ -40,7 +40,7 @@ const room_schema = Joi.object({
 })
 const schema = Joi.object({
     BOOKING_NAME: Joi.string().required().label("Booking Name"),
-    BOOKING_ID: Joi.optional().label("Booking Id"),
+    BOOKING_ID: Joi.optional().label("Booking Id").default(-1),
     DATE_CHECKIN: Joi.date().required().label("Check In"),
     DATE_CHECKOUT: Joi.date().required().label("Check Out"),
     ROOMS: Joi.array().items(room_schema).label("Rooms")

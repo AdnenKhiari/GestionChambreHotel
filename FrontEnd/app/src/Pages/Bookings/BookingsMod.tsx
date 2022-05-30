@@ -15,10 +15,10 @@ const ModComponent = ()=>{
     const getInitData = (dt: any )=>{
           dt.ROOMS.forEach((roomData: any)=>{
             roomData.FOOD_CHOICE =  roomData.FOOD_CHOICE.trim()
-            const new_clients =   roomData.CLIENTS.map((client : any)=>{
+            const new_clients : any[][] =   roomData.CLIENTS.map((client : any)=>{
                 client.CLIENT_DATE_OF_BIRTH = format_date(new Date(client.CLIENT_DATE_OF_BIRTH))
                 return client
-            }).map((client: any)=>  Object.values(client))
+            }).map((client: any)=>  Object.values(client).slice(0,4))
             roomData.CLIENTS = new_clients
         })
         return dt
