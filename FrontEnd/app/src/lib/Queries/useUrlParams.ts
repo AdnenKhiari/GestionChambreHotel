@@ -8,19 +8,15 @@ type QueryParamsGet = (
 )  => IUseQuery.IQueryResult 
 
 export const useUrlParams : QueryParamsGet  = (name : string,baseurl : string) => {
-    const [queryUrl,setQueryUrl] = React.useState<URL>(new URL(baseurl))
-    const {isLoading,isError,data : payload,refetch} = useQuery([name , queryUrl.searchParams.toString()],()=>{
-        return axios.get(queryUrl.toString(),{withCredentials: true}).then((dt)=>dt.data)
+    const [queryParams,setQueryParams] = React.useState<any>(null)
+    const {isLoading,isError,data : payload,refetch} = useQuery([name , queryParams ],()=>{
+        return axios.get(baseurl,{withCredentials: true,params: queryParams}).then((dt)=>dt.data)
     })
     const onValidate = (data : any)=>{
-        Object.keys(data).forEach((key)=>{
-            queryUrl.searchParams.set(key,data[key])
-        })
-        setQueryUrl(queryUrl)
+        setQueryParams(data)
         refetch()
     }
     return {
-        queryUrl,
         isLoading,
         isError,
         onValidate,

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "tsc -p .",
     "dev": "nodemon --files index.ts"
   },
   "author": "",

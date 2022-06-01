@@ -1,0 +1,10 @@
+FROM ghcr.io/oracle/oraclelinux8-instantclient:21
+RUN dnf -y module enable nodejs:16 && \
+    dnf -y install nodejs npm && \
+    rm -rf /var/cache/dnf
+WORKDIR /var/www/app
+COPY ["./package.json","./package-lock.json","./"]
+RUN npm install --only=production
+COPY ./dist/ .
+EXPOSE 80
+CMD ["node","index.js"]
