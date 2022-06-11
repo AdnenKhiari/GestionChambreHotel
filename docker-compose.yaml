@@ -12,24 +12,19 @@ services:
       - ./DB/OracleData/:/u01/app/oracle/oradata
   uiserver:
     image: dbzadnen/ghuiserver
-    container_name: uiserver
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-    ports:
-      - 8123:80
   restapiserver:
     image: dbzadnen/ghrestapiserver
-    container_name: restapiserver
     environment:
       - SERVER_PORT=80
       - DB_PASSWORD=$DB_PASSWORD
       - DB_USER=$DB_USER
       - DB_CONNECT=$DB_CONNECT
       - NODE_ENV=production
-    ports:
-      - 8124:80
     restart: unless-stopped
+    scale: 3
     depends_on:
       - oracledb
   ghserver:
