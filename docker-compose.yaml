@@ -8,13 +8,21 @@ services:
     ports:
       - 1521:1521
     restart: unless-stopped
+    networks:
+      ghnetwork:
+        ipv4_address: 172.20.0.5
     volumes:
-      - ./DB/OracleData/:/u01/app/oracle/oradata
+      - ghoraclev:/opt/oracle/oradata
   uiserver:
     image: dbzadnen/ghuiserver
     restart: unless-stopped
     environment:
       - NODE_ENV=production
+    ports:
+      - 8144:80
+    networks:
+      ghnetwork:
+        ipv4_address: 172.20.0.4
   restapiserver:
     image: dbzadnen/ghrestapiserver
     environment:
@@ -27,6 +35,8 @@ services:
     scale: 3
     depends_on:
       - oracledb
+    networks:
+      - ghnetwork
   ghserver:
     image: dbzadnen/ghserver
     container_name: ghserver
@@ -36,3 +46,13 @@ services:
     depends_on:
       - uiserver
       - restapiserver
+    networks:
+      ghnetwork:
+        ipv4_address: 172.20.0.3
+networks:
+  ghnetwork:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+volumes:
+  ghoraclev:
